@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResultItem(
+data class ResultData(
     @SerialName("danbooru_id")
     @Optional
     val danbooruId: String? = null,
@@ -15,6 +15,11 @@ data class ResultItem(
     @SerialName("drawr_id")
     @Optional
     val drawrId: String? = null,
+    @SerialName("pixiv_id")
+    @Optional
+    val pixivId: String? = null,
+    @Optional
+    val title: String? = null,
     @Optional
     val creator: String? = null,
     @Optional
