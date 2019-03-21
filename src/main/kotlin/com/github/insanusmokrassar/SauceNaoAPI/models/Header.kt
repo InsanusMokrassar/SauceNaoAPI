@@ -1,7 +1,9 @@
 package com.github.insanusmokrassar.SauceNaoAPI.models
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.github.insanusmokrassar.SauceNaoAPI.utils.JsonObjectSerializer
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.*
+import kotlinx.serialization.json.*
 
 @Serializable
 data class Header(
@@ -21,8 +23,9 @@ data class Header(
     val status: Int,
     @SerialName("results_requested")
     val resultsRequested: Int,
+    @Serializable(IndexesSerializer::class)
     @SerialName("index")
-    val indexes: List<Index>,
+    val indexes: List<HeaderIndex?>,
     @SerialName("search_depth")
     val searchDepth: Int,
     @SerialName("minimum_similarity")
@@ -34,3 +37,23 @@ data class Header(
     @SerialName("results_returned")
     val resultsCount: Int
 )
+
+object IndexesSerializer : KSerializer<List<HeaderIndex?>> {
+    override val descriptor: SerialDescriptor = StringDescriptor
+
+    override fun deserialize(decoder: Decoder): List<HeaderIndex?> {
+        val json = decoder.decodeSerializableValue(JsonObjectSerializer)
+        val parsed = json.keys.mapNotNull { it.toIntOrNull() }.sorted().mapNotNull {
+            val jsonObject = json.getObjectOrNull(it.toString()) ?: return@mapNotNull null
+            val index = Json.nonstrict.parse(HeaderIndex.serializer(), Json.stringify(JsonObjectSerializer, jsonObject))
+            it to index
+        }.toMap()
+        return Array<HeaderIndex?>(parsed.keys.max() ?: 0) {
+            parsed[it]
+        }.toList()
+    }
+
+    override fun serialize(encoder: Encoder, obj: List<HeaderIndex?>) {
+        TODO()
+    }
+}

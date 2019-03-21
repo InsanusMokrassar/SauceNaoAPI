@@ -1,5 +1,6 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
+import com.github.insanusmokrassar.SauceNaoAPI.models.Result
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
@@ -7,7 +8,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
 import io.ktor.client.response.readText
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 private const val API_TOKEN_FIELD = "api_key"
 private const val OUTPUT_TYPE_FIELD = "output_type"
@@ -91,7 +92,7 @@ data class SauceNaoAPI(
             resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
             minSimilarity ?.also { parameter(MINIMAL_SIMILARITY_FIELD, it) }
         }.response.readText().let {
-            JSON.nonstrict.parse(
+            Json.nonstrict.parse(
                 SauceNaoAnswer.serializer(),
                 it
             )

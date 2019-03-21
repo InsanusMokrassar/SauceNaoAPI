@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SauceNaoAnswer(
     val header: Header,
-    val data: ResultData
+    val results: List<Result>
 )
