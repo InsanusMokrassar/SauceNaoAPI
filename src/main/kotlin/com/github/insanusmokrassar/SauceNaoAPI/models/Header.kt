@@ -2,8 +2,8 @@ package com.github.insanusmokrassar.SauceNaoAPI.models
 
 import com.github.insanusmokrassar.SauceNaoAPI.utils.JsonObjectSerializer
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.internal.StringDescriptor
+import kotlinx.serialization.json.Json
 
 @Serializable
 data class Header(

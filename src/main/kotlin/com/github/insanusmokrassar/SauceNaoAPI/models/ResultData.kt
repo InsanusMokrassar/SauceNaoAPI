@@ -1,7 +1,8 @@
 package com.github.insanusmokrassar.SauceNaoAPI.models
 
 import com.github.insanusmokrassar.SauceNaoAPI.utils.CommonMultivariantStringSerializer
-import kotlinx.serialization.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResultData(

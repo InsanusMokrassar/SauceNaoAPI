@@ -1,6 +1,5 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
-import com.github.insanusmokrassar.SauceNaoAPI.models.Result
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
