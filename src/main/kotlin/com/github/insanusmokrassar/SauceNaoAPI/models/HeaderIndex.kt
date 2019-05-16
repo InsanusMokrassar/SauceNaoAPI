@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HeaderIndex(
-    val status: Int,
-    val id: Int,
-    val results: Int = 0,
+    val status: Int? = null,
+    val id: Int? = null,
+    val results: Int? = null,
     val parent_id: Int? = null
 )
