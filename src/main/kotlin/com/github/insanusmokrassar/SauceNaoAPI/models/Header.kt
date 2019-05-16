@@ -7,14 +7,6 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class Header(
-    @SerialName("short_limit")
-    val shortLimit: Int,
-    @SerialName("long_limit")
-    val longLimit: Int,
-    @SerialName("short_remaining")
-    val shortRemaining: Int,
-    @SerialName("long_remaining")
-    val longRemaining: Int,
     @SerialName("status")
     val status: Int,
     @SerialName("results_requested")
@@ -32,6 +24,14 @@ data class Header(
     val queryImage: String, // something like "uuid.jpg"
     @SerialName("results_returned")
     val resultsCount: Int,
+    @SerialName("short_remaining")
+    val shortRemaining: Int? = null,
+    @SerialName("long_remaining")
+    val longRemaining: Int? = null,
+    @SerialName("short_limit")
+    val shortLimit: Int? = null,
+    @SerialName("long_limit")
+    val longLimit: Int? = null,
     @SerialName("account_type")
     val accountType: String? = null,
     @SerialName("user_id")
