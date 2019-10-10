@@ -1,5 +1,7 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
+import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
+import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
 import io.ktor.client.HttpClient
@@ -44,11 +46,11 @@ data class SauceNaoAPI(
                     val answer = makeRequest(requestBuilder)
                     callback.resumeWith(Result.success(answer))
 
-                    val sleepUntil = if (answer.header.longRemaining == 0) {
-                        getMostOldestInLongPeriod() ?.plusMillis(LONG_TIME_LIMIT_MILLIS)
+                    val sleepUntil = if (answer.header.longRemaining < 1) {
+                        getMostOldestInLongPeriod() ?.plusMillis(LONG_TIME_RECALCULATING_MILLIS)
                     } else {
-                        if (answer.header.shortRemaining == 0) {
-                            getMostOldestInShortPeriod() ?.plusMillis(SHORT_TIME_LIMIT_MILLIS)
+                        if (answer.header.shortRemaining < 1) {
+                            getMostOldestInShortPeriod() ?.plusMillis(SHORT_TIME_RECALCULATING_MILLIS)
                         } else {
                             null
                         }
@@ -137,7 +139,7 @@ data class SauceNaoAPI(
     }
 
     private fun clearRequestTimes(relatedTo: DateTime = DateTime.now()) {
-        val limitValue = relatedTo.minusMillis(LONG_TIME_LIMIT_MILLIS)
+        val limitValue = relatedTo.minusMillis(LONG_TIME_RECALCULATING_MILLIS)
 
         requestsSendTimes.removeAll {
             it < limitValue
@@ -153,7 +155,7 @@ data class SauceNaoAPI(
     private fun getMostOldestInShortPeriod(): DateTime? {
         val now = DateTime.now()
 
-        val limitTime = now.minusMillis(SHORT_TIME_LIMIT_MILLIS)
+        val limitTime = now.minusMillis(SHORT_TIME_RECALCULATING_MILLIS)
 
         clearRequestTimes(now)
 
