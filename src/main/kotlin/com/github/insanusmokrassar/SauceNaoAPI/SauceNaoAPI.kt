@@ -32,7 +32,8 @@ data class SauceNaoAPI(
     private val apiToken: String,
     private val outputType: OutputType = JsonOutputType,
     private val client: HttpClient = HttpClient(OkHttp),
-    private val searchUrl: String = SEARCH_URL
+    private val searchUrl: String = SEARCH_URL,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Closeable {
     private val logger = Logger.getLogger("SauceNaoAPI")
 
@@ -40,7 +41,7 @@ data class SauceNaoAPI(
     private val requestsSendTimes = mutableListOf<DateTime>()
 
     init {
-        CoroutineScope(Dispatchers.Default).launch {
+        scope.launch {
             for ((callback, requestBuilder) in requestsChannel) {
                 try {
                     val answer = makeRequest(requestBuilder)
@@ -191,7 +192,7 @@ data class SauceNaoAPI(
 
     override fun close() {
         requestsChannel.close()
-        requestsSendTimes.clear()
         client.close()
+        requestsSendTimes.clear()
     }
 }
