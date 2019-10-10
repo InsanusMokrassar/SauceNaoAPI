@@ -1,4 +1,18 @@
-# 0.3.0
+# SauceNaoAPI Changelog
+
+## 0.4.0
+
+* Update libraries versions
+    * Kotlin `1.3.31` -> `1.3.50`
+    * Coroutines `1.2.1` -> `1.3.2`
+    * Serialization `0.11.0` -> `0.13.0`
+    * Joda Time `2.10.1` -> `2.10.4`
+    * Ktor `1.1.4` -> `1.2.5`
+* Now `SauceNaoAPI` is `Closeable`
+* Now `SauceNaoAPI` working with synchronous queue
+* `SauceNaoAPI` now will wait for some time when one of limits will be achieved
+
+## 0.3.0
 
 * Now `results` field of `SauceNaoAnswer` is optional and is empty list by default
 * Adapted structure almost completed and now can be used with raw results

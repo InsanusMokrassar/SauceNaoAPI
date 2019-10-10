@@ -5,14 +5,14 @@ import com.github.insanusmokrassar.SauceNaoAPI.models.Header
 
 val Header.shortLimitStatus: LimitStatus
     get() = LimitStatus(
-        shortRemaining ?: Int.MAX_VALUE,
-        shortLimit ?: Int.MAX_VALUE
+        shortRemaining,
+        shortLimit
     )
 
 val Header.longLimitStatus: LimitStatus
     get() = LimitStatus(
-        longRemaining ?: Int.MAX_VALUE,
-        longLimit ?: Int.MAX_VALUE
+        longRemaining,
+        longLimit
     )
 
 val Header.limits

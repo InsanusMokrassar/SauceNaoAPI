@@ -1,13 +1,21 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
+import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
+import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
 import io.ktor.client.HttpClient
-import io.ktor.client.call.call
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.request.parameter
-import io.ktor.client.request.url
+import io.ktor.client.features.ClientRequestException
+import io.ktor.client.request.*
 import io.ktor.client.response.readText
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.io.core.Closeable
 import kotlinx.serialization.json.Json
+import org.joda.time.DateTime
+import java.util.logging.Logger
+import kotlin.coroutines.*
 
 private const val API_TOKEN_FIELD = "api_key"
 private const val OUTPUT_TYPE_FIELD = "output_type"
@@ -24,8 +32,42 @@ data class SauceNaoAPI(
     private val apiToken: String,
     private val outputType: OutputType = JsonOutputType,
     private val client: HttpClient = HttpClient(OkHttp),
-    private val searchUrl: String = SEARCH_URL
-) {
+    private val searchUrl: String = SEARCH_URL,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+) : Closeable {
+    private val logger = Logger.getLogger("SauceNaoAPI")
+
+    private val requestsChannel = Channel<Pair<Continuation<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
+    private val requestsSendTimes = mutableListOf<DateTime>()
+
+    init {
+        scope.launch {
+            for ((callback, requestBuilder) in requestsChannel) {
+                try {
+                    val answer = makeRequest(requestBuilder)
+                    callback.resumeWith(Result.success(answer))
+
+                    val sleepUntil = if (answer.header.longRemaining < 1) {
+                        getMostOldestInLongPeriod() ?.plusMillis(LONG_TIME_RECALCULATING_MILLIS)
+                    } else {
+                        if (answer.header.shortRemaining < 1) {
+                            getMostOldestInShortPeriod() ?.plusMillis(SHORT_TIME_RECALCULATING_MILLIS)
+                        } else {
+                            null
+                        }
+                    }
+
+                    sleepUntil ?.also { _ ->
+                        logger.warning("LONG LIMIT REACHED, SLEEP UNTIL $sleepUntil")
+                        delay(sleepUntil.millis - DateTime.now().millis)
+                    }
+                } catch (e: Exception) {
+                    callback.resumeWith(Result.failure(e))
+                }
+            }
+        }
+    }
+
     suspend fun request(
         url: String,
         resultsCount: Int? = null,
@@ -73,6 +115,57 @@ data class SauceNaoAPI(
     )
 
     private suspend fun makeRequest(
+        builder: HttpRequestBuilder
+    ): SauceNaoAnswer {
+        return try {
+            val call = client.execute(builder)
+            val answerText = call.response.readText()
+            logger.info(answerText)
+            addRequestTimesAndClear()
+            Json.nonstrict.parse(
+                SauceNaoAnswer.serializer(),
+                answerText
+            )
+        } catch (e: ClientRequestException) {
+            throw e.sauceNaoAPIException
+        }
+    }
+
+    private fun addRequestTimesAndClear() {
+        val newDateTime = DateTime.now()
+
+        clearRequestTimes(newDateTime)
+
+        requestsSendTimes.add(newDateTime)
+    }
+
+    private fun clearRequestTimes(relatedTo: DateTime = DateTime.now()) {
+        val limitValue = relatedTo.minusMillis(LONG_TIME_RECALCULATING_MILLIS)
+
+        requestsSendTimes.removeAll {
+            it < limitValue
+        }
+    }
+
+    private fun getMostOldestInLongPeriod(): DateTime? {
+        clearRequestTimes()
+
+        return requestsSendTimes.min()
+    }
+
+    private fun getMostOldestInShortPeriod(): DateTime? {
+        val now = DateTime.now()
+
+        val limitTime = now.minusMillis(SHORT_TIME_RECALCULATING_MILLIS)
+
+        clearRequestTimes(now)
+
+        return requestsSendTimes.asSequence().filter {
+            limitTime < it
+        }.min()
+    }
+
+    private suspend fun makeRequest(
         url: String,
         db: Int? = null,
         dbmask: Int? = null,
@@ -80,21 +173,26 @@ data class SauceNaoAPI(
         resultsCount: Int? = null,
         minSimilarity: Float? = null
     ): SauceNaoAnswer? {
-        return client.call {
-            url(searchUrl)
-            parameter(URL_FIELD, url)
-            parameter(API_TOKEN_FIELD, apiToken)
-            parameter(OUTPUT_TYPE_FIELD, outputType.typeCode)
-            db ?.also { parameter(DB_FIELD, it) }
-            dbmask ?.also { parameter(DBMASK_FIELD, it) }
-            dbmaski ?.also { parameter(DBMASKI_FIELD, it) }
-            resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
-            minSimilarity ?.also { parameter(MINIMAL_SIMILARITY_FIELD, it) }
-        }.response.readText().let {
-            Json.nonstrict.parse(
-                SauceNaoAnswer.serializer(),
-                it
+        return suspendCoroutine<SauceNaoAnswer> {
+            requestsChannel.offer(
+                it to HttpRequestBuilder().apply {
+                    url(searchUrl)
+                    parameter(URL_FIELD, url)
+                    parameter(API_TOKEN_FIELD, apiToken)
+                    parameter(OUTPUT_TYPE_FIELD, outputType.typeCode)
+                    db ?.also { parameter(DB_FIELD, it) }
+                    dbmask ?.also { parameter(DBMASK_FIELD, it) }
+                    dbmaski ?.also { parameter(DBMASKI_FIELD, it) }
+                    resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
+                    minSimilarity ?.also { parameter(MINIMAL_SIMILARITY_FIELD, it) }
+                }
             )
         }
+    }
+
+    override fun close() {
+        requestsChannel.close()
+        client.close()
+        requestsSendTimes.clear()
     }
 }

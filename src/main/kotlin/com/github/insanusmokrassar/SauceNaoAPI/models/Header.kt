@@ -25,13 +25,13 @@ data class Header(
     @SerialName("query_image")
     val queryImage: String? = null, // something like "uuid.jpg"
     @SerialName("short_remaining")
-    val shortRemaining: Int? = null,
+    val shortRemaining: Int = Int.MAX_VALUE,
     @SerialName("long_remaining")
-    val longRemaining: Int? = null,
+    val longRemaining: Int = Int.MAX_VALUE,
     @SerialName("short_limit")
-    val shortLimit: Int? = null,
+    val shortLimit: Int = Int.MAX_VALUE,
     @SerialName("long_limit")
-    val longLimit: Int? = null,
+    val longLimit: Int = Int.MAX_VALUE,
     @SerialName("account_type")
     val accountType: Int? = null,
     @SerialName("user_id")

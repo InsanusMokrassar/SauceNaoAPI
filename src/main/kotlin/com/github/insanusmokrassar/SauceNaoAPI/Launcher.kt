@@ -1,16 +1,16 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 fun main(vararg args: String) {
-    val key = args.first()
-    val api = SauceNaoAPI(key)
+    val (key, requestUrl) = args
 
     runBlocking {
-        api.request(
-            args[1]
-        ).also {
-            println(it)
+        val api = SauceNaoAPI(key, scope = GlobalScope)
+        api.use {
+            println(
+                it.request(requestUrl)
+            )
         }
     }
 }
