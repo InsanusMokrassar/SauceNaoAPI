@@ -2,7 +2,7 @@
 
 It is wrapper for [SauceNAO](https://saucenao.com/) API. For now, library is
 in preview state. It can be fully used, but some of info can be unavailable from
-wrapper classes.
+wrapper classes, but now you can access them via `SauceNaoAnswer#row` field.
 
 ## Requester
 
