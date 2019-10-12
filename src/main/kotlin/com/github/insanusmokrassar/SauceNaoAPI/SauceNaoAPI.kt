@@ -4,6 +4,8 @@ import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATIN
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
+import com.github.insanusmokrassar.SauceNaoAPI.utils.*
+import com.github.insanusmokrassar.SauceNaoAPI.utils.calculateSleepTime
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.ClientRequestException
@@ -38,31 +40,23 @@ data class SauceNaoAPI(
     private val logger = Logger.getLogger("SauceNaoAPI")
 
     private val requestsChannel = Channel<Pair<Continuation<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
-    private val requestsSendTimes = mutableListOf<DateTime>()
+    private val timeManager = TimeManager(scope)
+    private val quotaManager = RequestQuotaManager(scope)
 
-    init {
-        scope.launch {
-            for ((callback, requestBuilder) in requestsChannel) {
+    private val requestsJob = scope.launch {
+        for ((callback, requestBuilder) in requestsChannel) {
+            try {
+                quotaManager.getQuota()
+
+                val answer = makeRequest(requestBuilder)
+                callback.resumeWith(Result.success(answer))
+
+                quotaManager.updateQuota(answer.header, timeManager)
+            } catch (e: Exception) {
                 try {
-                    val answer = makeRequest(requestBuilder)
-                    callback.resumeWith(Result.success(answer))
-
-                    val sleepUntil = if (answer.header.longRemaining < 1) {
-                        getMostOldestInLongPeriod() ?.plusMillis(LONG_TIME_RECALCULATING_MILLIS)
-                    } else {
-                        if (answer.header.shortRemaining < 1) {
-                            getMostOldestInShortPeriod() ?.plusMillis(SHORT_TIME_RECALCULATING_MILLIS)
-                        } else {
-                            null
-                        }
-                    }
-
-                    sleepUntil ?.also { _ ->
-                        logger.warning("LONG LIMIT REACHED, SLEEP UNTIL $sleepUntil")
-                        delay(sleepUntil.millis - DateTime.now().millis)
-                    }
-                } catch (e: Exception) {
                     callback.resumeWith(Result.failure(e))
+                } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
+                    // do nothing
                 }
             }
         }
@@ -121,7 +115,7 @@ data class SauceNaoAPI(
             val call = client.execute(builder)
             val answerText = call.response.readText()
             logger.info(answerText)
-            addRequestTimesAndClear()
+            timeManager.addTimeAndClear()
             Json.nonstrict.parse(
                 SauceNaoAnswer.serializer(),
                 answerText
@@ -129,40 +123,6 @@ data class SauceNaoAPI(
         } catch (e: ClientRequestException) {
             throw e.sauceNaoAPIException
         }
-    }
-
-    private fun addRequestTimesAndClear() {
-        val newDateTime = DateTime.now()
-
-        clearRequestTimes(newDateTime)
-
-        requestsSendTimes.add(newDateTime)
-    }
-
-    private fun clearRequestTimes(relatedTo: DateTime = DateTime.now()) {
-        val limitValue = relatedTo.minusMillis(LONG_TIME_RECALCULATING_MILLIS)
-
-        requestsSendTimes.removeAll {
-            it < limitValue
-        }
-    }
-
-    private fun getMostOldestInLongPeriod(): DateTime? {
-        clearRequestTimes()
-
-        return requestsSendTimes.min()
-    }
-
-    private fun getMostOldestInShortPeriod(): DateTime? {
-        val now = DateTime.now()
-
-        val limitTime = now.minusMillis(SHORT_TIME_RECALCULATING_MILLIS)
-
-        clearRequestTimes(now)
-
-        return requestsSendTimes.asSequence().filter {
-            limitTime < it
-        }.min()
     }
 
     private suspend fun makeRequest(
@@ -193,6 +153,8 @@ data class SauceNaoAPI(
     override fun close() {
         requestsChannel.close()
         client.close()
-        requestsSendTimes.clear()
+        requestsJob.cancel()
+        timeManager.close()
+        quotaManager.close()
     }
 }

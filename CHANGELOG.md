@@ -12,6 +12,12 @@
 * Now `SauceNaoAPI` working with synchronous queue
 * `SauceNaoAPI` now will wait for some time when one of limits will be achieved
 
+### 0.4.1 Managers experiments
+
+* Add `TimeManager` - it will manage work with requests times
+* Add `RequestQuotaMagager` - it will manage quota for requests and call suspend
+if they will be over
+
 ## 0.3.0
 
 * Now `results` field of `SauceNaoAnswer` is optional and is empty list by default
