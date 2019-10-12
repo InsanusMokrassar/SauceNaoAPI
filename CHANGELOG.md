@@ -12,6 +12,15 @@
 * Now `SauceNaoAPI` working with synchronous queue
 * `SauceNaoAPI` now will wait for some time when one of limits will be achieved
 
+### 0.4.1 Managers experiments and row format in answer
+
+* Add `TimeManager` - it will manage work with requests times
+* Add `RequestQuotaMagager` - it will manage quota for requests and call suspend
+if they will be over
+* `SauceNaoAPI` now working (almost) asynchronously
+* Now `SauceNaoAnswer` have field `row` which contains `JsonObject` with
+all original answer fields
+
 ## 0.3.0
 
 * Now `results` field of `SauceNaoAnswer` is optional and is empty list by default
