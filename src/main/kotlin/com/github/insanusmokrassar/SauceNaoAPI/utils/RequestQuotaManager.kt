@@ -26,14 +26,20 @@ class RequestQuotaManager (
         }
     }
 
-    suspend fun updateQuota(header: Header, timeManager: TimeManager) {
+    private suspend fun updateQuota(
+        newLongQuota: Int,
+        newShortQuota: Int,
+        newMaxLongQuota: Int?,
+        newMaxShortQuota: Int?,
+        timeManager: TimeManager
+    ) {
         quotaActions.send(
             suspend {
-                longMaxQuota = header.longLimit
-                shortMaxQuota = header.shortLimit
+                longMaxQuota = newMaxLongQuota ?: longMaxQuota
+                shortMaxQuota = newMaxShortQuota ?: shortMaxQuota
 
-                longQuota = min(header.longLimit, header.longRemaining)
-                shortQuota = min(header.shortLimit, header.shortRemaining)
+                longQuota = min(newLongQuota, longMaxQuota)
+                shortQuota = min(newShortQuota, shortMaxQuota)
 
                 when {
                     shortQuota < 1 -> timeManager.getMostOldestInShortPeriod() ?.millis ?.plus(SHORT_TIME_RECALCULATING_MILLIS) ?: let {
@@ -52,6 +58,22 @@ class RequestQuotaManager (
             }
         )
     }
+
+    suspend fun updateQuota(header: Header, timeManager: TimeManager) = updateQuota(
+        header.longRemaining,
+        header.shortRemaining,
+        header.longLimit,
+        header.shortLimit,
+        timeManager
+    )
+
+    suspend fun happenTooManyRequests(timeManager: TimeManager) = updateQuota(
+        1,
+        0,
+        null,
+        null,
+        timeManager
+    )
 
     suspend fun getQuota() {
         return suspendCoroutine {

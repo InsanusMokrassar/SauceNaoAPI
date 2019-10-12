@@ -2,6 +2,7 @@ package com.github.insanusmokrassar.SauceNaoAPI
 
 import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
 import com.github.insanusmokrassar.SauceNaoAPI.utils.*
@@ -52,6 +53,9 @@ data class SauceNaoAPI(
                     callback.resumeWith(Result.success(answer))
 
                     quotaManager.updateQuota(answer.header, timeManager)
+                } catch (e: TooManyRequestsException) {
+                    quotaManager.happenTooManyRequests(timeManager)
+                    requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
                     try {
                         callback.resumeWith(Result.failure(e))
