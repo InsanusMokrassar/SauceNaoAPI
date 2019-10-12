@@ -12,6 +12,10 @@
 * Now `SauceNaoAPI` working with synchronous queue
 * `SauceNaoAPI` now will wait for some time when one of limits will be achieved
 
+### 0.4.3
+
+Hotfix for serializer of `SauceNaoAnswer`
+
 ### 0.4.2
 
 Hotfix for autostop for some time when there is no remaining quotas for requests

@@ -5,6 +5,7 @@ import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATI
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
+import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswerSerializer
 import com.github.insanusmokrassar.SauceNaoAPI.utils.*
 import com.github.insanusmokrassar.SauceNaoAPI.utils.calculateSleepTime
 import io.ktor.client.HttpClient
@@ -122,7 +123,7 @@ data class SauceNaoAPI(
             logger.info(answerText)
             timeManager.addTimeAndClear()
             Json.nonstrict.parse(
-                SauceNaoAnswer.serializer(),
+                SauceNaoAnswerSerializer,
                 answerText
             )
         } catch (e: ClientRequestException) {

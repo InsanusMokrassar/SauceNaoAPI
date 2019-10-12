@@ -4,11 +4,11 @@ import kotlinx.serialization.*
 import kotlinx.serialization.internal.ArrayListSerializer
 import kotlinx.serialization.json.*
 
-@Serializable(SauceNaoAnswerSerializer::class)
-data class SauceNaoAnswer(
+@Serializable
+data class SauceNaoAnswer internal constructor(
     val header: Header,
     val results: List<Result> = emptyList(),
-    val raw: JsonObject
+    val raw: JsonObject = JsonObject(emptyMap())
 )
 
 @Serializer(SauceNaoAnswer::class)
@@ -20,10 +20,14 @@ object SauceNaoAnswerSerializer : KSerializer<SauceNaoAnswer> {
 
     override fun deserialize(decoder: Decoder): SauceNaoAnswer {
         val raw = JsonObjectSerializer.deserialize(decoder)
-        val header = serializer.fromJson(Header.serializer(), raw.getObject(headerField))
-        val results = serializer.fromJson(resultsSerializer, raw.getArray(resultsField))
+        val stringRaw = serializer.stringify(JsonObjectSerializer, raw)
 
-        return SauceNaoAnswer(header, results, raw)
+        return serializer.parse(
+            SauceNaoAnswer.serializer(),
+            stringRaw
+        ).copy(
+            raw = raw
+        )
     }
 
     override fun serialize(encoder: Encoder, obj: SauceNaoAnswer) {
