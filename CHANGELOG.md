@@ -17,6 +17,7 @@
 * Add `TimeManager` - it will manage work with requests times
 * Add `RequestQuotaMagager` - it will manage quota for requests and call suspend
 if they will be over
+* `SauceNaoAPI` now working (almost) asynchronously
 
 ## 0.3.0
 

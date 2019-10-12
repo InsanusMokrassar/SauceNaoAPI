@@ -45,18 +45,19 @@ data class SauceNaoAPI(
 
     private val requestsJob = scope.launch {
         for ((callback, requestBuilder) in requestsChannel) {
-            try {
-                quotaManager.getQuota()
-
-                val answer = makeRequest(requestBuilder)
-                callback.resumeWith(Result.success(answer))
-
-                quotaManager.updateQuota(answer.header, timeManager)
-            } catch (e: Exception) {
+            quotaManager.getQuota()
+            launch {
                 try {
-                    callback.resumeWith(Result.failure(e))
-                } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
-                    // do nothing
+                    val answer = makeRequest(requestBuilder)
+                    callback.resumeWith(Result.success(answer))
+
+                    quotaManager.updateQuota(answer.header, timeManager)
+                } catch (e: Exception) {
+                    try {
+                        callback.resumeWith(Result.failure(e))
+                    } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
+                        // do nothing
+                    }
                 }
             }
         }
