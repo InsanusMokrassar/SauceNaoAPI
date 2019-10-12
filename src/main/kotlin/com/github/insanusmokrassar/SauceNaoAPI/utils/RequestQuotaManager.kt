@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.io.core.Closeable
 import org.joda.time.DateTime
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.max
 import kotlin.math.min
 
 class RequestQuotaManager (
@@ -42,17 +43,13 @@ class RequestQuotaManager (
                 shortQuota = min(newShortQuota, shortMaxQuota)
 
                 when {
-                    shortQuota < 1 -> timeManager.getMostOldestInShortPeriod() ?.millis ?.plus(SHORT_TIME_RECALCULATING_MILLIS) ?: let {
-                        shortQuota = 1
-                        null
-                    }
-                    longQuota < 1 -> timeManager.getMostOldestInLongPeriod() ?.millis ?.plus(LONG_TIME_RECALCULATING_MILLIS) ?: let {
-                        longQuota = 1
-                        null
-                    }
+                    longQuota < 1 -> (timeManager.getMostOldestInLongPeriod() ?: DateTime.now()).millis + LONG_TIME_RECALCULATING_MILLIS
+                    shortQuota < 1 -> (timeManager.getMostOldestInShortPeriod() ?: DateTime.now()).millis + SHORT_TIME_RECALCULATING_MILLIS
                     else -> null
-                } ?.let {
+                } ?.also {
                     delay(it - DateTime.now().millis)
+                    shortQuota = max(shortQuota, 1)
+                    longQuota = max(longQuota, 1)
                 }
                 Unit
             }
