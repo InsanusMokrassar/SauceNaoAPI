@@ -14,6 +14,8 @@
 
 ### 0.4.2
 
+Hotfix for autostop for some time when there is no remaining quotas for requests
+
 ### 0.4.1 Managers experiments and row format in answer
 
 * Add `TimeManager` - it will manage work with requests times
