@@ -1,9 +1,9 @@
 package com.github.insanusmokrassar.SauceNaoAPI.models
 
-import com.github.insanusmokrassar.SauceNaoAPI.utils.JsonObjectSerializer
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.StringDescriptor
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObjectSerializer
 
 @Serializable
 data class Header(
@@ -38,11 +38,11 @@ data class Header(
     val userId: Int? = null
 )
 
-object IndexesSerializer : KSerializer<List<HeaderIndex?>> {
+internal object IndexesSerializer : KSerializer<List<HeaderIndex?>> {
     override val descriptor: SerialDescriptor = StringDescriptor
 
     override fun deserialize(decoder: Decoder): List<HeaderIndex?> {
-        val json = decoder.decodeSerializableValue(JsonObjectSerializer)
+        val json = JsonObjectSerializer.deserialize(decoder)
         val parsed = json.keys.mapNotNull { it.toIntOrNull() }.sorted().mapNotNull {
             val jsonObject = json.getObjectOrNull(it.toString()) ?: return@mapNotNull null
             val index = Json.nonstrict.parse(HeaderIndex.serializer(), Json.stringify(JsonObjectSerializer, jsonObject))

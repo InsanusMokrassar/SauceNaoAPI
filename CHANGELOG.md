@@ -16,6 +16,11 @@
 
 Hotfix for serializer of `SauceNaoAnswer`
 
+### 0.4.4
+
+* Uploading of file
+* Updates of versions
+
 ### 0.4.2
 
 Hotfix for autostop for some time when there is no remaining quotas for requests

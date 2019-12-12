@@ -3,10 +3,10 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.models.Header
+import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.io.core.Closeable
-import org.joda.time.DateTime
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.max
 import kotlin.math.min
@@ -43,11 +43,11 @@ class RequestQuotaManager (
                 shortQuota = min(newShortQuota, shortMaxQuota)
 
                 when {
-                    longQuota < 1 -> (timeManager.getMostOldestInLongPeriod() ?: DateTime.now()).millis + LONG_TIME_RECALCULATING_MILLIS
-                    shortQuota < 1 -> (timeManager.getMostOldestInShortPeriod() ?: DateTime.now()).millis + SHORT_TIME_RECALCULATING_MILLIS
+                    longQuota < 1 -> (timeManager.getMostOldestInLongPeriod() ?: DateTime.now()).unixMillisLong + LONG_TIME_RECALCULATING_MILLIS.toLong()
+                    shortQuota < 1 -> (timeManager.getMostOldestInShortPeriod() ?: DateTime.now()).unixMillisLong + SHORT_TIME_RECALCULATING_MILLIS.toLong()
                     else -> null
                 } ?.also {
-                    delay(it - DateTime.now().millis)
+                    delay((it - DateTime.now().unixMillisLong))
                     shortQuota = max(shortQuota, 1)
                     longQuota = max(longQuota, 1)
                 }

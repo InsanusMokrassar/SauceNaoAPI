@@ -2,16 +2,17 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 
 import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.TimeSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.io.core.Closeable
-import org.joda.time.DateTime
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
 private fun MutableList<DateTime>.clearTooOldTimes(relatedTo: DateTime = DateTime.now()) {
-    val limitValue = relatedTo.minusMillis(LONG_TIME_RECALCULATING_MILLIS)
+    val limitValue = relatedTo.minus(TimeSpan(LONG_TIME_RECALCULATING_MILLIS.toDouble()))
 
     removeAll {
         it < limitValue
@@ -55,7 +56,7 @@ private data class TimeManagerMostOldestInShortGetter(
 
         val now = DateTime.now()
 
-        val limitTime = now.minusMillis(SHORT_TIME_RECALCULATING_MILLIS)
+        val limitTime = now.minus(TimeSpan(SHORT_TIME_RECALCULATING_MILLIS.toDouble()))
 
         continuation.resumeWith(
             Result.success(
