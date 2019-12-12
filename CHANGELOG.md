@@ -12,14 +12,14 @@
 * Now `SauceNaoAPI` working with synchronous queue
 * `SauceNaoAPI` now will wait for some time when one of limits will be achieved
 
-### 0.4.3
-
-Hotfix for serializer of `SauceNaoAnswer`
-
 ### 0.4.4
 
 * Uploading of file
 * Updates of versions
+
+### 0.4.3
+
+Hotfix for serializer of `SauceNaoAnswer`
 
 ### 0.4.2
 
