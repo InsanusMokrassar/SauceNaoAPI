@@ -12,8 +12,8 @@ internal suspend fun calculateSleepTime(
     mostOldestInLongPeriodGetter: suspend () -> DateTime?
 ): DateTime? {
     return when {
-        header.longRemaining < 1 -> mostOldestInLongPeriodGetter() ?.plus(TimeSpan(LONG_TIME_RECALCULATING_MILLIS))
-        header.shortRemaining < 1 -> mostOldestInShortPeriodGetter() ?.plus(TimeSpan(SHORT_TIME_RECALCULATING_MILLIS))
+        header.longRemaining < 1 -> mostOldestInLongPeriodGetter() ?.plus(LONG_TIME_RECALCULATING_MILLIS)
+        header.shortRemaining < 1 -> mostOldestInShortPeriodGetter() ?.plus(SHORT_TIME_RECALCULATING_MILLIS)
         else -> null
     }
 }

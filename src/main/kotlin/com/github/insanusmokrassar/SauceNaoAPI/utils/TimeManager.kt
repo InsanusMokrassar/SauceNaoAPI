@@ -12,7 +12,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
 private fun MutableList<DateTime>.clearTooOldTimes(relatedTo: DateTime = DateTime.now()) {
-    val limitValue = relatedTo.minus(TimeSpan(LONG_TIME_RECALCULATING_MILLIS.toDouble()))
+    val limitValue = relatedTo - LONG_TIME_RECALCULATING_MILLIS
 
     removeAll {
         it < limitValue
@@ -56,7 +56,7 @@ private data class TimeManagerMostOldestInShortGetter(
 
         val now = DateTime.now()
 
-        val limitTime = now.minus(TimeSpan(SHORT_TIME_RECALCULATING_MILLIS.toDouble()))
+        val limitTime = now - SHORT_TIME_RECALCULATING_MILLIS
 
         continuation.resumeWith(
             Result.success(

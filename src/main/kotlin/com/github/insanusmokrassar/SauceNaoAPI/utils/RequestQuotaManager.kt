@@ -43,11 +43,11 @@ class RequestQuotaManager (
                 shortQuota = min(newShortQuota, shortMaxQuota)
 
                 when {
-                    longQuota < 1 -> (timeManager.getMostOldestInLongPeriod() ?: DateTime.now()).unixMillisLong + LONG_TIME_RECALCULATING_MILLIS.toLong()
-                    shortQuota < 1 -> (timeManager.getMostOldestInShortPeriod() ?: DateTime.now()).unixMillisLong + SHORT_TIME_RECALCULATING_MILLIS.toLong()
+                    longQuota < 1 -> (timeManager.getMostOldestInLongPeriod() ?: DateTime.now()) + LONG_TIME_RECALCULATING_MILLIS
+                    shortQuota < 1 -> (timeManager.getMostOldestInShortPeriod() ?: DateTime.now()) + SHORT_TIME_RECALCULATING_MILLIS
                     else -> null
                 } ?.also {
-                    delay((it - DateTime.now().unixMillisLong))
+                    delay((it - DateTime.now()).millisecondsLong)
                     shortQuota = max(shortQuota, 1)
                     longQuota = max(longQuota, 1)
                 }
