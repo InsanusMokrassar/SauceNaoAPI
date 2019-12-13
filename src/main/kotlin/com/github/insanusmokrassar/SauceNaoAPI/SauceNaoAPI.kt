@@ -36,7 +36,7 @@ private const val MINIMAL_SIMILARITY_FIELD = "minsim"
 private const val SEARCH_URL = "https://saucenao.com/search.php"
 
 data class SauceNaoAPI(
-    private val apiToken: String,
+    private val apiToken: String? = null,
     private val outputType: OutputType = JsonOutputType,
     private val client: HttpClient = HttpClient(OkHttp),
     private val searchUrl: String = SEARCH_URL,
@@ -158,7 +158,7 @@ data class SauceNaoAPI(
                 it to HttpRequestBuilder().apply {
                     url(searchUrl)
 
-                    parameter(API_TOKEN_FIELD, apiToken)
+                    apiToken ?.also { parameter(API_TOKEN_FIELD, it) }
                     parameter(OUTPUT_TYPE_FIELD, outputType.typeCode)
                     db ?.also { parameter(DB_FIELD, it) }
                     dbmask ?.also { parameter(DBMASK_FIELD, it) }

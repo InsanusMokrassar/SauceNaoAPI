@@ -16,6 +16,7 @@
 
 * Uploading of file
 * Updates of versions
+* Now `SauceNaoAPI` do not require api key
 
 ### 0.4.3
 
