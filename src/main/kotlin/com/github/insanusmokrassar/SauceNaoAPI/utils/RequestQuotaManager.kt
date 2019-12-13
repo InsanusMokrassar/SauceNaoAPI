@@ -2,6 +2,8 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 
 import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
+import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsLongException
 import com.github.insanusmokrassar.SauceNaoAPI.models.Header
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
@@ -64,8 +66,8 @@ class RequestQuotaManager (
         timeManager
     )
 
-    suspend fun happenTooManyRequests(timeManager: TimeManager) = updateQuota(
-        1,
+    suspend fun happenTooManyRequests(timeManager: TimeManager, e: TooManyRequestsException) = updateQuota(
+        if (e is TooManyRequestsLongException) 0 else 1,
         0,
         null,
         null,

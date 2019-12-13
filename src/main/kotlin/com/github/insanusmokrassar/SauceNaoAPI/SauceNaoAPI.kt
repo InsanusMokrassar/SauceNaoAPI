@@ -58,7 +58,8 @@ data class SauceNaoAPI(
 
                     quotaManager.updateQuota(answer.header, timeManager)
                 } catch (e: TooManyRequestsException) {
-                    quotaManager.happenTooManyRequests(timeManager)
+                    logger.warning("Exceed time limit. Answer was:\n${e.answerContent}")
+                    quotaManager.happenTooManyRequests(timeManager, e)
                     requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
                     try {
@@ -141,7 +142,7 @@ data class SauceNaoAPI(
                 answerText
             )
         } catch (e: ClientRequestException) {
-            throw e.sauceNaoAPIException
+            throw e.sauceNaoAPIException()
         }
     }
 
