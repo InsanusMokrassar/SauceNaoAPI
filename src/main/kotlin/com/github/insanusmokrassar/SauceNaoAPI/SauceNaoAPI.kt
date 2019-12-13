@@ -2,11 +2,9 @@ package com.github.insanusmokrassar.SauceNaoAPI
 
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
-import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
-import com.github.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswerSerializer
+import com.github.insanusmokrassar.SauceNaoAPI.models.*
 import com.github.insanusmokrassar.SauceNaoAPI.utils.*
 import io.ktor.client.HttpClient
-import io.ktor.client.call.UnsupportedContentTypeException
 import io.ktor.client.call.call
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.ClientRequestException
@@ -14,12 +12,12 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.response.readText
 import io.ktor.http.*
-import io.ktor.http.content.OutgoingContent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.io.core.*
 import kotlinx.serialization.json.Json
 import java.util.logging.Logger
+import kotlin.Result
 import kotlin.coroutines.*
 
 private const val API_TOKEN_FIELD = "api_key"
@@ -47,6 +45,9 @@ data class SauceNaoAPI(
     private val requestsChannel = Channel<Pair<Continuation<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
     private val timeManager = TimeManager(scope)
     private val quotaManager = RequestQuotaManager(scope)
+
+    val limitsState: LimitsState
+        get() = quotaManager.limitsState
 
     private val requestsJob = scope.launch {
         for ((callback, requestBuilder) in requestsChannel) {

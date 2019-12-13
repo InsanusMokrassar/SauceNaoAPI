@@ -5,6 +5,7 @@ import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATI
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
 import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsLongException
 import com.github.insanusmokrassar.SauceNaoAPI.models.Header
+import com.github.insanusmokrassar.SauceNaoAPI.models.LimitsState
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -13,13 +14,21 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.math.max
 import kotlin.math.min
 
-class RequestQuotaManager (
-    private val scope: CoroutineScope
+internal class RequestQuotaManager (
+    scope: CoroutineScope
 ) : Closeable {
     private var longQuota = 1
     private var shortQuota = 1
     private var longMaxQuota = 1
     private var shortMaxQuota = 1
+
+    val limitsState: LimitsState
+        get() = LimitsState(
+            shortMaxQuota,
+            longMaxQuota,
+            shortQuota,
+            longQuota
+        )
 
     private val quotaActions = Channel<suspend () -> Unit>(Channel.UNLIMITED)
 

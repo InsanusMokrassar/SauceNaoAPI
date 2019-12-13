@@ -17,6 +17,8 @@
 * Uploading of file
 * Updates of versions
 * Now `SauceNaoAPI` do not require api key
+* `SauceNaoAPI` instances now can return `limitsState` object, which will contains `LimitsState` with currently known
+state of limits
 
 ### 0.4.3
 

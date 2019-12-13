@@ -68,7 +68,7 @@ private data class TimeManagerMostOldestInShortGetter(
     }
 }
 
-class TimeManager(
+internal class TimeManager(
     scope: CoroutineScope
 ) : Closeable {
     private val actionsChannel = Channel<TimeManagerAction>(Channel.UNLIMITED)
