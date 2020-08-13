@@ -1,12 +1,9 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
-import com.github.insanusmokrassar.SauceNaoAPI.utils.mimeType
 import io.ktor.http.ContentType
+import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.*
-import kotlinx.io.core.readText
-import kotlinx.io.streams.asInput
 import java.io.File
-import java.net.URLConnection
 import java.nio.file.Files
 
 suspend fun main(vararg args: String) {

@@ -1,5 +1,9 @@
 # SauceNaoAPI Changelog
 
+## 0.5.0
+
+* Versions updates
+
 ## 0.4.0
 
 * Update libraries versions

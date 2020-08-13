@@ -1,7 +1,7 @@
 package com.github.insanusmokrassar.SauceNaoAPI
 
 import io.ktor.http.ContentType
-import kotlinx.io.core.Input
+import io.ktor.utils.io.core.Input
 
 internal sealed class SauceRequestSubject
 

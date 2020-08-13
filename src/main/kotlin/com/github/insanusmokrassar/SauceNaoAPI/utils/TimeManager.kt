@@ -7,7 +7,7 @@ import com.soywiz.klock.TimeSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import kotlinx.io.core.Closeable
+import java.io.Closeable
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 

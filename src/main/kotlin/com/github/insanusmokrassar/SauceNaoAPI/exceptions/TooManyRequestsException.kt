@@ -4,9 +4,9 @@ import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATIN
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.TimeSpan
 import io.ktor.client.features.ClientRequestException
-import io.ktor.client.response.readText
+import io.ktor.client.statement.readText
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
-import kotlinx.io.IOException
+import io.ktor.utils.io.errors.IOException
 
 internal suspend fun ClientRequestException.sauceNaoAPIException(): Exception  {
         return when (response.status) {

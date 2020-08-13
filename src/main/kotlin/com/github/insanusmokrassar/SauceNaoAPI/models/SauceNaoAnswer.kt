@@ -1,7 +1,7 @@
 package com.github.insanusmokrassar.SauceNaoAPI.models
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.ArrayListSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.*
 
 @Serializable
@@ -13,7 +13,7 @@ data class SauceNaoAnswer internal constructor(
 
 @Serializer(SauceNaoAnswer::class)
 object SauceNaoAnswerSerializer : KSerializer<SauceNaoAnswer> {
-    private val resultsSerializer = ArrayListSerializer(Result.serializer())
+    private val resultsSerializer = ListSerializer(Result.serializer())
     private const val headerField = "header"
     private const val resultsField = "results"
     private val serializer = Json.nonstrict
