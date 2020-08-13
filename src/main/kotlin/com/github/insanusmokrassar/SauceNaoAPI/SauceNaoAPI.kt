@@ -10,12 +10,14 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
-import io.ktor.client.response.readText
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.readText
 import io.ktor.http.*
+import io.ktor.utils.io.core.Input
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.io.core.*
 import kotlinx.serialization.json.Json
+import java.io.Closeable
 import java.util.logging.Logger
 import kotlin.Result
 import kotlin.coroutines.*
@@ -134,8 +136,8 @@ data class SauceNaoAPI(
         builder: HttpRequestBuilder
     ): SauceNaoAnswer {
         return try {
-            val call = client.call(builder)
-            val answerText = call.response.readText()
+            val call = client.request<HttpResponse>(builder)
+            val answerText = call.readText()
             logger.info(answerText)
             timeManager.addTimeAndClear()
             Json.nonstrict.parse(

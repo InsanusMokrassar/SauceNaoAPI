@@ -9,7 +9,7 @@ import com.github.insanusmokrassar.SauceNaoAPI.models.LimitsState
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.io.core.Closeable
+import java.io.Closeable
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.max
 import kotlin.math.min

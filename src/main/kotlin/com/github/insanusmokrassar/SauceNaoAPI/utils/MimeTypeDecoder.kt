@@ -2,7 +2,7 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 
 import io.ktor.http.ContentType
 import io.ktor.util.asStream
-import kotlinx.io.core.Input
+import io.ktor.utils.io.core.Input
 import java.io.InputStream
 import java.net.URLConnection
 
