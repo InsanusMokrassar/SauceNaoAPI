@@ -4,6 +4,8 @@
 
 * Versions updates
 
+### 0.5.1
+
 ## 0.4.0
 
 * Update libraries versions
