@@ -6,6 +6,8 @@
 
 ### 0.5.1
 
+* All known fields were added to `ResultData`
+
 ## 0.4.0
 
 * Update libraries versions
