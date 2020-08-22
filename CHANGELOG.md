@@ -1,12 +1,12 @@
 # SauceNaoAPI Changelog
 
+### 0.6.0
+
+* All known fields were added to `ResultData`
+
 ## 0.5.0
 
 * Versions updates
-
-### 0.5.1
-
-* All known fields were added to `ResultData`
 
 ## 0.4.0
 
