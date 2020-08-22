@@ -1,5 +1,4 @@
-package com.github.insanusmokrassar.SauceNaoAPI
-
+import com.github.insanusmokrassar.SauceNaoAPI.SauceNaoAPI
 import io.ktor.http.ContentType
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.*

@@ -5,20 +5,18 @@ import com.github.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
 import com.github.insanusmokrassar.SauceNaoAPI.models.*
 import com.github.insanusmokrassar.SauceNaoAPI.utils.*
 import io.ktor.client.HttpClient
-import io.ktor.client.call.call
-import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
 import io.ktor.http.*
+import io.ktor.utils.io.core.Closeable
 import io.ktor.utils.io.core.Input
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.serialization.json.Json
-import java.io.Closeable
-import java.util.logging.Logger
+import kotlinx.serialization.json.nonstrict
 import kotlin.Result
 import kotlin.coroutines.*
 
@@ -35,15 +33,21 @@ private const val MINIMAL_SIMILARITY_FIELD = "minsim"
 
 private const val SEARCH_URL = "https://saucenao.com/search.php"
 
+val defaultSauceNaoParser = Json {
+    allowSpecialFloatingPointValues = true
+    allowStructuredMapKeys = true
+    ignoreUnknownKeys = true
+    useArrayPolymorphism = true
+}
+
 data class SauceNaoAPI(
     private val apiToken: String? = null,
     private val outputType: OutputType = JsonOutputType,
-    private val client: HttpClient = HttpClient(OkHttp),
+    private val client: HttpClient = HttpClient(),
     private val searchUrl: String = SEARCH_URL,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    private val parser: Json = defaultSauceNaoParser
 ) : Closeable {
-    private val logger = Logger.getLogger("SauceNaoAPI")
-
     private val requestsChannel = Channel<Pair<Continuation<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
     private val timeManager = TimeManager(scope)
     private val quotaManager = RequestQuotaManager(scope)
@@ -61,7 +65,6 @@ data class SauceNaoAPI(
 
                     quotaManager.updateQuota(answer.header, timeManager)
                 } catch (e: TooManyRequestsException) {
-                    logger.warning("Exceed time limit. Answer was:\n${e.answerContent}")
                     quotaManager.happenTooManyRequests(timeManager, e)
                     requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
@@ -87,7 +90,7 @@ data class SauceNaoAPI(
 
     suspend fun request(
         mediaInput: Input,
-        mimeType: ContentType = mediaInput.mimeType,
+        mimeType: ContentType,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
     ): SauceNaoAnswer? = makeRequest(
@@ -138,9 +141,8 @@ data class SauceNaoAPI(
         return try {
             val call = client.request<HttpResponse>(builder)
             val answerText = call.readText()
-            logger.info(answerText)
             timeManager.addTimeAndClear()
-            Json.nonstrict.parse(
+            parser.decodeFromString(
                 SauceNaoAnswerSerializer,
                 answerText
             )

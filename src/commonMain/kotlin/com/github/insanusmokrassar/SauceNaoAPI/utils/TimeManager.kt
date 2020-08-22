@@ -3,11 +3,10 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 import com.github.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
 import com.github.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimeSpan
+import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import java.io.Closeable
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
@@ -44,7 +43,7 @@ private data class TimeManagerMostOldestInLongGetter(
 ) : TimeManagerAction {
     override suspend fun makeChangeWith(times: MutableList<DateTime>) {
         times.clearTooOldTimes()
-        continuation.resumeWith(Result.success(times.min()))
+        continuation.resumeWith(Result.success(times.minOrNull()))
     }
 }
 
@@ -62,7 +61,7 @@ private data class TimeManagerMostOldestInShortGetter(
             Result.success(
                 times.asSequence().filter {
                     limitTime < it
-                }.min()
+                }.minOrNull()
             )
         )
     }

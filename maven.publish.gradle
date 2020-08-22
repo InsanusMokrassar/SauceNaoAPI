@@ -1,63 +1,53 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar) {
-    from javadoc
+task javadocsJar(type: Jar) {
     classifier = 'javadoc'
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            groupId "${project.group}"
-            artifactId "${project.name}"
-            version "${project.version}"
-
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    name "${project_public_name}"
-                    description "${project_public_description}"
-                    url "https://insanusmokrassar.github.io/${project.name}"
-
-                    scm {
-                        connection "scm:git:git://github.com/insanusmokrassar/${project.name}.git"
-                        developerConnection "scm:git:[fetch=]https://github.com/insanusmokrassar/${project.name}.git[push=]ssh:git@github.com:insanusmokrassar/${project.name}.git"
-                        url "https://github.com/insanusmokrassar/${project.name}"
-
-                    }
-
-                    developers {
-                        developer {
-                            id "InsanusMokrassar"
-                            name "Ovsyannikov Alexey"
-                            email "ovsyannikov.alexey95@gmail.com"
-                        }
-                    }
-
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'https://github.com/InsanusMokrassar/TelegramBotAPI/blob/master/LICENSE'
-                            distribution 'repo'
-                        }
-                    }
-                }
-            }
+afterEvaluate {
+    project.publishing.publications.all {
+        // rename artifacts
+        groupId "${project.group}"
+        if (it.name.contains('kotlinMultiplatform')) {
+            artifactId = "${project.name}"
+        } else {
+            artifactId = "${project.name}-$name"
         }
     }
 }
 
-signing {
-    useGpgCmd()
-    sign publishing.publications.maven
+publishing {
+    publications.all {
+        artifact javadocsJar
+
+        pom {
+            description = "SauceNao API library"
+            name = "SauceNao API"
+            url = "https://insanusmokrassar.github.io/${project.name}"
+
+            scm {
+                developerConnection = "scm:git:[fetch=]https://github.com/insanusmokrassar/${project.name}.git[push=]https://github.com/insanusmokrassar/${project.name}.git"
+                url = "https://github.com/insanusmokrassar/${project.name}.git"
+            }
+
+            developers {
+                
+                    developer {
+                        id = "InsanusMokrassar"
+                        name = "Ovsyannikov Alexey"
+                        email = "ovsyannikov.alexey95@gmail.com"
+                    }
+                
+            }
+
+            licenses {
+                
+                    license {
+                        name = "Apache Software License 2.0"
+                        url = "https://github.com/InsanusMokrassar/TelegramBotAPI/blob/master/LICENSE"
+                    }
+                
+            }
+        }
+    }
 }

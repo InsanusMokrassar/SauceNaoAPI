@@ -7,9 +7,9 @@ import com.github.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsLongExc
 import com.github.insanusmokrassar.SauceNaoAPI.models.Header
 import com.github.insanusmokrassar.SauceNaoAPI.models.LimitsState
 import com.soywiz.klock.DateTime
+import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import java.io.Closeable
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.max
 import kotlin.math.min

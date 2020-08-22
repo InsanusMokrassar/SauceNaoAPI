@@ -9,6 +9,7 @@ import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.utils.io.errors.IOException
 
 internal suspend fun ClientRequestException.sauceNaoAPIException(): Exception  {
+    val response = response ?: return this
         return when (response.status) {
             TooManyRequests -> {
                 val answerContent = response.readText()
@@ -21,14 +22,14 @@ internal suspend fun ClientRequestException.sauceNaoAPIException(): Exception  {
         }
     }
 
-sealed class TooManyRequestsException : IOException() {
+sealed class TooManyRequestsException(message: String, cause: Throwable? = null) : IOException(message, cause) {
     abstract val answerContent: String
     abstract val waitTime: TimeSpan
 }
 
-class TooManyRequestsShortException(override val answerContent: String) : TooManyRequestsException() {
+class TooManyRequestsShortException(override val answerContent: String) : TooManyRequestsException("Too many requests were sent in the short period") {
     override val waitTime: TimeSpan = SHORT_TIME_RECALCULATING_MILLIS
 }
-class TooManyRequestsLongException(override val answerContent: String) : TooManyRequestsException() {
+class TooManyRequestsLongException(override val answerContent: String) : TooManyRequestsException("Too many requests were sent in the long period") {
     override val waitTime: TimeSpan = LONG_TIME_RECALCULATING_MILLIS
 }

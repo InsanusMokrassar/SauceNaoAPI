@@ -1,9 +1,12 @@
 package com.github.insanusmokrassar.SauceNaoAPI.models
 
+import com.github.insanusmokrassar.SauceNaoAPI.defaultSauceNaoParser
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.StringDescriptor
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObjectSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.*
 
 @Serializable
 data class Header(
@@ -39,21 +42,24 @@ data class Header(
 )
 
 internal object IndexesSerializer : KSerializer<List<HeaderIndex?>> {
-    override val descriptor: SerialDescriptor = StringDescriptor
+    override val descriptor: SerialDescriptor = String.serializer().descriptor
 
     override fun deserialize(decoder: Decoder): List<HeaderIndex?> {
-        val json = JsonObjectSerializer.deserialize(decoder)
+        val json = JsonObject.serializer().deserialize(decoder)
         val parsed = json.keys.mapNotNull { it.toIntOrNull() }.sorted().mapNotNull {
-            val jsonObject = json.getObjectOrNull(it.toString()) ?: return@mapNotNull null
-            val index = Json.nonstrict.parse(HeaderIndex.serializer(), Json.stringify(JsonObjectSerializer, jsonObject))
+            val jsonObject = json[it.toString()] ?.jsonObject ?: return@mapNotNull null
+            val index = defaultSauceNaoParser.decodeFromString(
+                HeaderIndex.serializer(),
+                defaultSauceNaoParser.encodeToString(JsonObject.serializer(), jsonObject)
+            )
             it to index
         }.toMap()
-        return Array<HeaderIndex?>(parsed.keys.max() ?: 0) {
+        return Array<HeaderIndex?>(parsed.keys.maxOrNull() ?: 0) {
             parsed[it]
         }.toList()
     }
 
-    override fun serialize(encoder: Encoder, obj: List<HeaderIndex?>) {
+    override fun serialize(encoder: Encoder, value: List<HeaderIndex?>) {
         TODO()
     }
 }

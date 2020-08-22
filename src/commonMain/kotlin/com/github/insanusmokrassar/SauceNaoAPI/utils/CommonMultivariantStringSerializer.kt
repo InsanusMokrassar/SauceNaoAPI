@@ -3,6 +3,8 @@ package com.github.insanusmokrassar.SauceNaoAPI.utils
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.json.*
 
 
 @Serializer(String::class)
@@ -10,10 +12,10 @@ object CommonMultivariantStringSerializer : KSerializer<String> by String.serial
     private val stringArraySerializer = ListSerializer(String.serializer())
 
     override fun deserialize(decoder: Decoder): String {
-        return try {
-            decoder.decodeSerializableValue(String.serializer())
-        } catch (e: Exception) {
-            decoder.decodeSerializableValue(stringArraySerializer).joinToString()
+        return when (val parsed = JsonElement.serializer().deserialize(decoder)) {
+            is JsonPrimitive -> parsed.content
+            is JsonArray -> parsed.joinToString { it.jsonPrimitive.content }
+            else -> error("Unexpected answer object has been received: $parsed")
         }
     }
 }
