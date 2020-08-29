@@ -67,7 +67,7 @@ data class SauceNaoAPI(
                     requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
                     try {
-                        callback.resume(e)
+                        callback.resumeWithException(e)
                     } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
                         // do nothing
                     }
