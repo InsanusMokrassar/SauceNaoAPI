@@ -27,7 +27,7 @@ bintray {
     }
     pkg {
         repo = "StandardRepository"
-        name = "${project.name}"
+        name = "${project.name}-mpp"
         vcsUrl = "https://github.com/InsanusMokrassar/${project.name}"
         licenses = ["Apache-2.0"]
         version {
