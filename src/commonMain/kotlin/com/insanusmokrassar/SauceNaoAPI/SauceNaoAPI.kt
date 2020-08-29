@@ -16,8 +16,7 @@ import io.ktor.utils.io.core.Input
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.*
 
 private const val API_TOKEN_FIELD = "api_key"
 private const val OUTPUT_TYPE_FIELD = "output_type"
@@ -60,7 +59,7 @@ data class SauceNaoAPI(
             launch {
                 try {
                     val answer = makeRequest(requestBuilder)
-                    callback.resumeWith(Result.success(answer))
+                    callback.resume(answer)
 
                     quotaManager.updateQuota(answer.header, timeManager)
                 } catch (e: TooManyRequestsException) {
@@ -68,7 +67,7 @@ data class SauceNaoAPI(
                     requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
                     try {
-                        callback.resumeWith(Result.failure(e))
+                        callback.resume(e)
                     } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
                         // do nothing
                     }
