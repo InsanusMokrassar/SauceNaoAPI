@@ -26,7 +26,7 @@ bintray {
         into "${project.group}".replace(".", "/")
     }
     pkg {
-        repo = "StandardRepository"
+        repo = "InsanusMokrassar"
         name = "${project.name}-mpp"
         vcsUrl = "https://github.com/InsanusMokrassar/${project.name}"
         licenses = ["Apache-2.0"]
