@@ -1,6 +1,7 @@
 import com.insanusmokrassar.SauceNaoAPI.SauceNaoAPI
 import com.insanusmokrassar.SauceNaoAPI.utils.useSafe
 import io.ktor.http.ContentType
+import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.*
 import java.io.File
 import java.nio.file.Files
