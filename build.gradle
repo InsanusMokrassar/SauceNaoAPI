@@ -14,11 +14,11 @@ buildscript {
 
 plugins {
     id "org.jetbrains.kotlin.multiplatform" version "$kotlin_version"
+    id "org.jetbrains.kotlin.plugin.serialization" version "$kotlin_version"
 }
-apply plugin: 'kotlinx-serialization'
 
 project.version = "0.6.0"
-project.group = "com.github.insanusmokrassar"
+project.group = "com.insanusmokrassar"
 
 apply from: "publish.gradle"
 

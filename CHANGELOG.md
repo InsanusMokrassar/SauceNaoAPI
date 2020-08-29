@@ -2,6 +2,8 @@
 
 ### 0.6.0
 
+**MAIN PACKAGE WAS CHANGED: `com.github.insanusmokrassar` -> `com.insanusmokrassar`**
+
 * All known fields were added to `ResultData`
 * Versions updates:
     * `Kotlin`: `1.3.72` -> `1.4.0`
@@ -9,7 +11,6 @@
     * `Serialization`: `0.20.0` -> `1.0.0-RC`
     * `Klock`: `1.11.14` -> `1.12.0`
     * `Ktor`: `1.3.2` -> `1.4.0`
-
 
 ## 0.5.0
 
