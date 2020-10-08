@@ -43,7 +43,7 @@ kotlin {
                 implementation kotlin('stdlib')
 
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-                api "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlin_serialisation_runtime_version"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlin_serialisation_runtime_version"
                 api "com.soywiz.korlibs.klock:klock:$klock_version"
                 api "io.ktor:ktor-client-core:$ktor_version"
             }
