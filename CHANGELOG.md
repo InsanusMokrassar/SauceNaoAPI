@@ -1,6 +1,6 @@
 # SauceNaoAPI Changelog
 
-### 0.6.0
+## 0.6.0
 
 **MAIN PACKAGE WAS CHANGED: `com.github.insanusmokrassar` -> `com.insanusmokrassar`**
 
@@ -11,6 +11,8 @@
     * `Serialization`: `0.20.0` -> `1.0.0-RC`
     * `Klock`: `1.11.14` -> `1.12.0`
     * `Ktor`: `1.3.2` -> `1.4.0`
+
+### 0.6.1
 
 ## 0.5.0
 
