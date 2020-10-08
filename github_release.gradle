@@ -2,7 +2,8 @@ private String getCurrentVersionChangelog() {
     OutputStream changelogDataOS = new ByteArrayOutputStream()
     exec {
         standardOutput = changelogDataOS
-        commandLine './changelog_info_retriever', "$library_version", 'CHANGELOG.md'
+        commandLine 'chmod', "+x", './changelog_parser.sh'
+        commandLine './changelog_parser.sh', "$library_version", 'CHANGELOG.md'
     }
 
     return changelogDataOS.toString().trim()
