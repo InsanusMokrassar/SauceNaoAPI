@@ -7,6 +7,7 @@
   * `Kotlin Serialisation`: `1.0.0-RC2` -> `1.0.1`
   * `Kotlin Coroutines`: `1.3.9` -> `1.4.2`
   * `Klock`: `1.12.1` -> `2.0.0`
+  * `Ktor`: `1.4.1` -> `1.4.3`
 
 ## 0.6.1
 
