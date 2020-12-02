@@ -1,5 +1,5 @@
-import com.insanusmokrassar.SauceNaoAPI.SauceNaoAPI
-import com.insanusmokrassar.SauceNaoAPI.utils.useSafe
+import dev.inmo.saucenaoapi.SauceNaoAPI
+import dev.inmo.saucenaoapi.utils.useSafe
 import io.ktor.http.ContentType
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.*
