@@ -1,9 +1,9 @@
-package dev.inmo.SauceNaoAPI
+package dev.inmo.saucenaoapi
 
-import com.insanusmokrassar.SauceNaoAPI.exceptions.TooManyRequestsException
-import com.insanusmokrassar.SauceNaoAPI.exceptions.sauceNaoAPIException
-import com.insanusmokrassar.SauceNaoAPI.models.*
-import com.insanusmokrassar.SauceNaoAPI.utils.*
+import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
+import dev.inmo.saucenaoapi.exceptions.sauceNaoAPIException
+import dev.inmo.saucenaoapi.models.*
+import dev.inmo.saucenaoapi.utils.*
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.*
@@ -40,7 +40,7 @@ val defaultSauceNaoParser = Json {
 
 data class SauceNaoAPI(
     private val apiToken: String? = null,
-    private val outputType: dev.inmo.SauceNaoAPI.OutputType = dev.inmo.SauceNaoAPI.JsonOutputType,
+    private val outputType: dev.inmo.saucenaoapi.OutputType = dev.inmo.saucenaoapi.JsonOutputType,
     private val client: HttpClient = HttpClient(),
     private val searchUrl: String = SEARCH_URL,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),

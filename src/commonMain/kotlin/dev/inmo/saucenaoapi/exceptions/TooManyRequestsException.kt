@@ -1,7 +1,7 @@
-package dev.inmo.SauceNaoAPI.exceptions
+package dev.inmo.saucenaoapi.exceptions
 
-import com.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
-import com.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
+import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.TimeSpan
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.statement.readText

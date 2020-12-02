@@ -1,6 +1,6 @@
-package dev.inmo.SauceNaoAPI.models
+package dev.inmo.saucenaoapi.models
 
-import com.insanusmokrassar.SauceNaoAPI.utils.CommonMultivariantStringSerializer
+import dev.inmo.saucenaoapi.utils.CommonMultivariantStringSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

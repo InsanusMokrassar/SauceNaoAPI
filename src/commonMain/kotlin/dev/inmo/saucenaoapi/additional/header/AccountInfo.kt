@@ -1,7 +1,7 @@
-package dev.inmo.SauceNaoAPI.additional.header
+package dev.inmo.saucenaoapi.additional.header
 
-import com.insanusmokrassar.SauceNaoAPI.additional.*
-import com.insanusmokrassar.SauceNaoAPI.models.Header
+import dev.inmo.saucenaoapi.additional.*
+import dev.inmo.saucenaoapi.models.Header
 
 val Header.shortLimitStatus: LimitStatus
     get() = LimitStatus(

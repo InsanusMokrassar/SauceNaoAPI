@@ -1,4 +1,4 @@
-package dev.inmo.SauceNaoAPI.models
+package dev.inmo.saucenaoapi.models
 
 import kotlinx.serialization.Serializable
 

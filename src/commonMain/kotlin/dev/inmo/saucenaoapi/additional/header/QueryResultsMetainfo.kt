@@ -1,6 +1,6 @@
-package dev.inmo.SauceNaoAPI.additional.header
+package dev.inmo.saucenaoapi.additional.header
 
-import com.insanusmokrassar.SauceNaoAPI.models.Header
+import dev.inmo.saucenaoapi.models.Header
 
 val Header.queryPreview
     get() = QueryResultPreview(

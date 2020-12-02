@@ -1,4 +1,4 @@
-package dev.inmo.SauceNaoAPI.utils
+package dev.inmo.saucenaoapi.utils
 
 import kotlinx.coroutines.supervisorScope
 

@@ -2,6 +2,14 @@
 
 ## 0.7.0
 
+**BREAKING CHANGES: PACKAGE HAS BEEN CHANGED FROM `com.insanusmokrassar` to `dev.inmo`**
+
+Migration:
+
+* Packages in the whole project were changed `com.insanusmokrassar.SauceNaoAPI` -> `dev.inmo.tgbotapi`
+* Change implementation in your gradle files: `implementation "com.insanusmokrassar:SauceNaoAPI:*"` ->
+`implementation "dev.inmo:saucenaoapi:*"`
+
 ## 0.6.2
 
 * Versions updates:

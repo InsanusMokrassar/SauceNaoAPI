@@ -1,4 +1,4 @@
-package dev.inmo.SauceNaoAPI.additional
+package dev.inmo.saucenaoapi.additional
 
 import com.soywiz.klock.TimeSpan
 

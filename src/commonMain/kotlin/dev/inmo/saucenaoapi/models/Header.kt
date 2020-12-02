@@ -1,6 +1,6 @@
-package dev.inmo.SauceNaoAPI.models
+package dev.inmo.saucenaoapi.models
 
-import com.insanusmokrassar.SauceNaoAPI.defaultSauceNaoParser
+import dev.inmo.saucenaoapi.defaultSauceNaoParser
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor

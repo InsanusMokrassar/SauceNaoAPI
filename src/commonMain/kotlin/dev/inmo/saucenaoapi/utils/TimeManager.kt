@@ -1,7 +1,7 @@
-package dev.inmo.SauceNaoAPI.utils
+package dev.inmo.saucenaoapi.utils
 
-import com.insanusmokrassar.SauceNaoAPI.additional.LONG_TIME_RECALCULATING_MILLIS
-import com.insanusmokrassar.SauceNaoAPI.additional.SHORT_TIME_RECALCULATING_MILLIS
+import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
+import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel

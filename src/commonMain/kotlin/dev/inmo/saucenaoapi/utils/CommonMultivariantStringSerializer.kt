@@ -1,8 +1,7 @@
-package dev.inmo.SauceNaoAPI.utils
+package dev.inmo.saucenaoapi.utils
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.json.*

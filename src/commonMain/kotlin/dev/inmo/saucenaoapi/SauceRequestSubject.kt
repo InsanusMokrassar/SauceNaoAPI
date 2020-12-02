@@ -1,4 +1,4 @@
-package dev.inmo.SauceNaoAPI
+package dev.inmo.saucenaoapi
 
 import io.ktor.http.ContentType
 import io.ktor.utils.io.core.Input

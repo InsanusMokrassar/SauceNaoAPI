@@ -1,9 +1,9 @@
-package dev.inmo.SauceNaoAPI.additional.results
+package dev.inmo.saucenaoapi.additional.results
 
-import com.insanusmokrassar.SauceNaoAPI.additional.header.IndexInfo
-import com.insanusmokrassar.SauceNaoAPI.additional.header.ResultMetaInfo
-import com.insanusmokrassar.SauceNaoAPI.models.Result
-import com.insanusmokrassar.SauceNaoAPI.models.ResultData
+import dev.inmo.saucenaoapi.additional.header.IndexInfo
+import dev.inmo.saucenaoapi.additional.header.ResultMetaInfo
+import dev.inmo.saucenaoapi.models.Result
+import dev.inmo.saucenaoapi.models.ResultData
 
 fun Result.adapted(
     resultMetaInfo: ResultMetaInfo

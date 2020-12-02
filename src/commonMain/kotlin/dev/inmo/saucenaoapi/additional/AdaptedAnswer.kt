@@ -1,10 +1,10 @@
-package dev.inmo.SauceNaoAPI.additional
+package dev.inmo.saucenaoapi.additional
 
-import com.insanusmokrassar.SauceNaoAPI.additional.header.ResultMetaInfo
-import com.insanusmokrassar.SauceNaoAPI.additional.header.adapted
-import com.insanusmokrassar.SauceNaoAPI.additional.results.AdaptedResult
-import com.insanusmokrassar.SauceNaoAPI.additional.results.adapted
-import com.insanusmokrassar.SauceNaoAPI.models.SauceNaoAnswer
+import dev.inmo.saucenaoapi.additional.header.ResultMetaInfo
+import dev.inmo.saucenaoapi.additional.header.adapted
+import dev.inmo.saucenaoapi.additional.results.AdaptedResult
+import dev.inmo.saucenaoapi.additional.results.adapted
+import dev.inmo.saucenaoapi.models.SauceNaoAnswer
 
 val SauceNaoAnswer.adapted: AdaptedAnswer
     get() = header.adapted.let { resultMetainfo ->
