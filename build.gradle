@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$gradle_bintray_plugin_version"
         classpath "com.github.breadmoirai:github-release:$gradle_github_release_plugin_version"
     }
 }
@@ -45,7 +44,7 @@ kotlin {
                 implementation kotlin('stdlib')
 
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-                api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlin_serialisation_runtime_version"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlin_serialisation_version"
                 api "com.soywiz.korlibs.klock:klock:$klock_version"
                 api "io.ktor:ktor-client-core:$ktor_version"
             }
@@ -56,18 +55,13 @@ kotlin {
                 implementation kotlin('test-annotations-common')
             }
         }
-        jvmMain {
-            dependencies {
-                implementation kotlin('stdlib')
-            }
-        }
         jvmTest {
             dependencies {
                 implementation kotlin('test-junit')
                 implementation "io.ktor:ktor-client-okhttp:$ktor_version"
             }
         }
-        jsMain {
+        jsTest {
             dependencies {
                 implementation kotlin('test-js')
             }

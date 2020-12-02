@@ -9,18 +9,17 @@ import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.utils.io.errors.IOException
 
 internal suspend fun ClientRequestException.sauceNaoAPIException(): Exception  {
-    val response = response ?: return this
-        return when (response.status) {
-            TooManyRequests -> {
-                val answerContent = response.readText()
-                when {
-                    answerContent.contains("daily limit") -> TooManyRequestsLongException(answerContent)
-                    else -> TooManyRequestsShortException(answerContent)
-                }
+    return when (response.status) {
+        TooManyRequests -> {
+            val answerContent = response.readText()
+            when {
+                answerContent.contains("daily limit") -> TooManyRequestsLongException(answerContent)
+                else -> TooManyRequestsShortException(answerContent)
             }
-            else -> this
         }
+        else -> this
     }
+}
 
 sealed class TooManyRequestsException(message: String, cause: Throwable? = null) : IOException(message, cause) {
     abstract val answerContent: String
