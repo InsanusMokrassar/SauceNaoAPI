@@ -1,6 +1,6 @@
 # SauceNaoAPI
 
-[![Download](https://api.bintray.com/packages/insanusmokrassar/InsanusMokrassar/SauceNaoAPI-mpp/images/download.svg)](https://bintray.com/insanusmokrassar/InsanusMokrassar/SauceNaoAPI-mpp/_latestVersion)
+ [ ![Download](https://api.bintray.com/packages/insanusmokrassar/SauceNaoAPI/saucenaoapi/images/download.svg) ](https://bintray.com/insanusmokrassar/SauceNaoAPI/saucenaoapi/_latestVersion)
 
 It is wrapper for [SauceNAO](https://saucenao.com/) API. For now, library is
 in preview state. It can be fully used, but some of info can be unavailable from
