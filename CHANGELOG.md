@@ -2,6 +2,12 @@
 
 ## 0.6.2
 
+* Versions updates:
+  * `Kotlin`: `1.4.10` -> `1.4.20`
+  * `Kotlin Serialisation`: `1.0.0-RC2` -> `1.0.1`
+  * `Kotlin Coroutines`: `1.3.9` -> `1.4.2`
+  * `Klock`: `1.12.1` -> `2.0.0`
+
 ## 0.6.1
 
 * Versions updates:
