@@ -6,7 +6,7 @@
 
 Migration:
 
-* Packages in the whole project were changed `com.insanusmokrassar.SauceNaoAPI` -> `dev.inmo.tgbotapi`
+* Packages in the whole project were changed `com.insanusmokrassar.SauceNaoAPI` -> `dev.inmo.saucenaoapi`
 * Change implementation in your gradle files: `implementation "com.insanusmokrassar:SauceNaoAPI:*"` ->
 `implementation "dev.inmo:saucenaoapi:*"`
 
