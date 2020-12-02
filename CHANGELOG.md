@@ -1,5 +1,15 @@
 # SauceNaoAPI Changelog
 
+## 0.6.2
+
+## 0.6.1
+
+* Versions updates:
+  * `Kotlin`: `1.4.0` -> `1.4.10`
+  * `Kotlin Serialisation`: `1.0.0-RC` -> `1.0.0-RC2`
+  * `Klock`: `1.12.0` -> `1.12.1`
+  * `Ktor`: `1.4.0` -> `1.4.1`
+
 ## 0.6.0
 
 **MAIN PACKAGE WAS CHANGED: `com.github.insanusmokrassar` -> `com.insanusmokrassar`**
@@ -12,31 +22,11 @@
     * `Klock`: `1.11.14` -> `1.12.0`
     * `Ktor`: `1.3.2` -> `1.4.0`
 
-### 0.6.1
-
-* Versions updates:
-    * `Kotlin`: `1.4.0` -> `1.4.10`
-    * `Kotlin Serialisation`: `1.0.0-RC` -> `1.0.0-RC2`
-    * `Klock`: `1.12.0` -> `1.12.1`
-    * `Ktor`: `1.4.0` -> `1.4.1`
-
 ## 0.5.0
 
 * Versions updates
 
-## 0.4.0
-
-* Update libraries versions
-    * Kotlin `1.3.31` -> `1.3.50`
-    * Coroutines `1.2.1` -> `1.3.2`
-    * Serialization `0.11.0` -> `0.13.0`
-    * Joda Time `2.10.1` -> `2.10.4`
-    * Ktor `1.1.4` -> `1.2.5`
-* Now `SauceNaoAPI` is `Closeable`
-* Now `SauceNaoAPI` working with synchronous queue
-* `SauceNaoAPI` now will wait for some time when one of limits will be achieved
-
-### 0.4.4
+## 0.4.4
 
 * Uploading of file
 * Updates of versions
@@ -44,15 +34,15 @@
 * `SauceNaoAPI` instances now can return `limitsState` object, which will contains `LimitsState` with currently known
 state of limits
 
-### 0.4.3
+## 0.4.3
 
 Hotfix for serializer of `SauceNaoAnswer`
 
-### 0.4.2
+## 0.4.2
 
 Hotfix for autostop for some time when there is no remaining quotas for requests
 
-### 0.4.1 Managers experiments and row format in answer
+## 0.4.1 Managers experiments and row format in answer
 
 * Add `TimeManager` - it will manage work with requests times
 * Add `RequestQuotaMagager` - it will manage quota for requests and call suspend
@@ -60,6 +50,18 @@ if they will be over
 * `SauceNaoAPI` now working (almost) asynchronously
 * Now `SauceNaoAnswer` have field `row` which contains `JsonObject` with
 all original answer fields
+
+## 0.4.0
+
+* Update libraries versions
+  * Kotlin `1.3.31` -> `1.3.50`
+  * Coroutines `1.2.1` -> `1.3.2`
+  * Serialization `0.11.0` -> `0.13.0`
+  * Joda Time `2.10.1` -> `2.10.4`
+  * Ktor `1.1.4` -> `1.2.5`
+* Now `SauceNaoAPI` is `Closeable`
+* Now `SauceNaoAPI` working with synchronous queue
+* `SauceNaoAPI` now will wait for some time when one of limits will be achieved
 
 ## 0.3.0
 
