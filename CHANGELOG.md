@@ -1,5 +1,7 @@
 # SauceNaoAPI Changelog
 
+## 0.7.1
+
 ## 0.7.0
 
 **BREAKING CHANGES: PACKAGE HAS BEEN CHANGED FROM `com.insanusmokrassar` to `dev.inmo`**
