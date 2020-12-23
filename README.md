@@ -11,7 +11,7 @@ wrapper classes, but now you can access them via `SauceNaoAnswer#row` field.
 ### Gradle
 
 ```groovy
-implementation "com.insanusmokrassar:SauceNaoAPI:$saucenaoapi_version"
+implementation "dev.inmo:saucenaoapi:$saucenaoapi_version"
 ```
 
 ## Requester
