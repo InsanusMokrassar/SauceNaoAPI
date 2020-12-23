@@ -1,5 +1,12 @@
 # SauceNaoAPI Changelog
 
+## 0.7.1
+
+* Versions updates:
+  * `Kotlin`: `1.4.20` -> `1.4.21`
+  * `Klock`: `2.0.0` -> `2.0.2`
+  * `Ktor`: `1.4.3` -> `1.5.0`
+
 ## 0.7.0
 
 **BREAKING CHANGES: PACKAGE HAS BEEN CHANGED FROM `com.insanusmokrassar` to `dev.inmo`**
