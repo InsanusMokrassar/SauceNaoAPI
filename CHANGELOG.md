@@ -1,5 +1,11 @@
 # SauceNaoAPI Changelog
 
+## 0.7.2
+
+* Versions updates:
+  * `Klock`: `2.0.2` -> `2.0.4`
+  * `Ktor`: `1.5.0` -> `1.5.1`
+
 ## 0.7.1
 
 * Versions updates:
