@@ -2,6 +2,13 @@
 
 ## 0.8.0
 
+* Versions updates:
+  * `Kotlin`: `1.4.21` -> `1.4.31`
+  * `Klock`: `2.0.4` -> `2.0.6`
+  * `Ktor`: `1.5.1` -> `1.5.2`
+  * `Kotlin Serialisation`: `1.0.1` -> `1.1.0`
+  * `Kotlin Coroutines`: `1.4.2` -> `1.4.3`
+
 ## 0.7.2
 
 * Versions updates:
