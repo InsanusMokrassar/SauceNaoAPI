@@ -1,23 +1,8 @@
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 task javadocsJar(type: Jar) {
     classifier = 'javadoc'
-}
-task sourceJar (type : Jar) {
-    classifier = 'sources'
-}
-
-afterEvaluate {
-    project.publishing.publications.all {
-        // rename artifacts
-        groupId "${project.group}"
-        if (it.name.contains('kotlinMultiplatform')) {
-            artifactId = "${project.name}"
-            artifact sourceJar
-        } else {
-            artifactId = "${project.name}-$name"
-        }
-    }
 }
 
 publishing {
@@ -48,22 +33,27 @@ publishing {
                 
                     license {
                         name = "Apache Software License 2.0"
-                        url = "https://github.com/InsanusMokrassar/TelegramBotAPI/blob/master/LICENSE"
+                        url = "https://github.com/InsanusMokrassar/SauceNaoAPI/blob/master/LICENSE"
                     }
                 
             }
         }
-        
         repositories {
-            maven {
-                name = "bintray"
-                url = uri("https://api.bintray.com/maven/${project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')}/SauceNaoAPI/${project.name}/;publish=1;override=1")
-                credentials {
-                    username = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
-                    password = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : System.getenv('BINTRAY_KEY')
+            if ((project.hasProperty('SONATYPE_USER') || System.getenv('SONATYPE_USER') != null) && (project.hasProperty('SONATYPE_PASSWORD') || System.getenv('SONATYPE_PASSWORD') != null)) {
+                maven {
+                    name = "sonatype"
+                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    credentials {
+                        username = project.hasProperty('SONATYPE_USER') ? project.property('SONATYPE_USER') : System.getenv('SONATYPE_USER')
+                        password = project.hasProperty('SONATYPE_PASSWORD') ? project.property('SONATYPE_PASSWORD') : System.getenv('SONATYPE_PASSWORD')
+                    }
                 }
             }
         }
-        
     }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications
 }
