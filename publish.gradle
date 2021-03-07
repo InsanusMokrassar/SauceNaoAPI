@@ -33,7 +33,7 @@ publishing {
                 
                     license {
                         name = "Apache Software License 2.0"
-                        url = "https://github.com/InsanusMokrassar/TelegramBotAPI/blob/master/LICENSE"
+                        url = "https://github.com/InsanusMokrassar/SauceNaoAPI/blob/master/LICENSE"
                     }
                 
             }
