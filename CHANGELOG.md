@@ -1,5 +1,12 @@
 # SauceNaoAPI Changelog
 
+## 0.8.1
+
+* Versions updates:
+  * `Kotlin`: `1.4.31` -> `1.4.32`
+  * `Klock`: `2.0.6` -> `2.0.7`
+  * `Ktor`: `1.5.2` -> `1.5.3`
+
 ## 0.8.0
 
 * Versions updates:
