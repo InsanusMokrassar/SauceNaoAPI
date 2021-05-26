@@ -158,7 +158,7 @@ data class SauceNaoAPI(
         minSimilarity: Float? = null
     ): SauceNaoAnswer? {
         return suspendCoroutine<SauceNaoAnswer> {
-            requestsChannel.offer(
+            requestsChannel.trySend(
                 it to HttpRequestBuilder().apply {
                     url(searchUrl)
 

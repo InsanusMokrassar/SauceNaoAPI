@@ -92,7 +92,7 @@ internal class RequestQuotaManager (
                     quotaActions.send(callback)
                 }
             }
-            quotaActions.offer(callback)
+            quotaActions.trySend(callback)
         }
     }
 
