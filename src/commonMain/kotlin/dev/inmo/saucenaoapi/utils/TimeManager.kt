@@ -84,7 +84,7 @@ internal class TimeManager(
 
     suspend fun getMostOldestInLongPeriod(): DateTime? {
         return suspendCoroutine {
-            actionsChannel.offer(
+            actionsChannel.trySend(
                 TimeManagerMostOldestInLongGetter(it)
             )
         }
@@ -92,7 +92,7 @@ internal class TimeManager(
 
     suspend fun getMostOldestInShortPeriod(): DateTime? {
         return suspendCoroutine {
-            actionsChannel.offer(TimeManagerMostOldestInShortGetter(it))
+            actionsChannel.trySend(TimeManagerMostOldestInShortGetter(it))
         }
     }
 
