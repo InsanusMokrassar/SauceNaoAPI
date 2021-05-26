@@ -1,5 +1,7 @@
 # SauceNaoAPI Changelog
 
+## 0.8.2
+
 ## 0.8.1
 
 * Versions updates:
