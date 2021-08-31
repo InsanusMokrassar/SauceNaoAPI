@@ -1,6 +1,7 @@
 # SauceNaoAPI
 
- [ ![Download](https://api.bintray.com/packages/insanusmokrassar/SauceNaoAPI/saucenaoapi/images/download.svg) ](https://bintray.com/insanusmokrassar/SauceNaoAPI/saucenaoapi/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.inmo/saucenaoapi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.inmo/saucenaoapi)
+
 
 It is wrapper for [SauceNAO](https://saucenao.com/) API. For now, library is
 in preview state. It can be fully used, but some of info can be unavailable from
