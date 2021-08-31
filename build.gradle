@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
         mavenCentral()
     }
 
@@ -32,7 +31,7 @@ repositories {
 
 kotlin {
     jvm()
-    js(BOTH) {
+    js(IR) {
         browser()
         nodejs()
     }
