@@ -6,6 +6,7 @@
   * `Kotlin`: `1.5.30` -> `1.5.31`
   * `Klock`: `2.4.0` -> `2.4.2`
   * `Coroutines`: `1.5.1` -> `1.5.2`
+* Add several extensions to `ResultData`: `authors`, `froms`, `charactersList`, `titles`
 
 ## 0.9.0
 
