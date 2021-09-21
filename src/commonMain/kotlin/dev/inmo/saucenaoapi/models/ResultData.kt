@@ -171,3 +171,6 @@ val ResultData.charactersList: List<String>
 
 val ResultData.titles: List<String>
     get() = title ?.split(", ") ?: emptyList()
+
+val ResultData.urls: List<String>
+    get() = extUrls + (url ?.split(", ") ?: emptyList())
