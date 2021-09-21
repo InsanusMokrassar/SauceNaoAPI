@@ -159,3 +159,18 @@ data class ResultData(
     @SerialName("ext_urls")
     val extUrls: List<String> = emptyList()
 )
+
+val ResultData.froms: List<String>
+    get() = material ?.split(", ") ?: emptyList()
+
+val ResultData.authors: List<String>
+    get() = (creator ?.split(", ") ?: emptyList()) + (memberName ?.split(", ") ?: emptyList())
+
+val ResultData.charactersList: List<String>
+    get() = characters ?.split(", ") ?: emptyList()
+
+val ResultData.titles: List<String>
+    get() = title ?.split(", ") ?: emptyList()
+
+val ResultData.urls: List<String>
+    get() = extUrls + (url ?.split(", ") ?: emptyList())
