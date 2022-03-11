@@ -1,0 +1,30 @@
+[versions]
+
+kt = "1.6.10"
+kt-serialization = "1.3.2"
+kt-coroutines = "1.6.0"
+
+klock = "2.6.2"
+ktor = "1.6.7"
+
+gh-release = "2.2.12"
+
+[libraries]
+
+kt-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kt" }
+kt-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kt-serialization" }
+kt-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kt-coroutines" }
+
+klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
+
+ktor-client = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+
+buildscript-kt-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kt" }
+buildscript-kt-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kt" }
+buildscript-gh-release = { module = "com.github.breadmoirai:github-release", version.ref = "gh-release" }
+
+[plugins]
+
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kt" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kt" }

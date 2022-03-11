@@ -5,15 +5,15 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath "com.github.breadmoirai:github-release:$gradle_github_release_plugin_version"
+        classpath libs.buildscript.kt.gradle
+        classpath libs.buildscript.kt.serialization
+        classpath libs.buildscript.gh.release
     }
 }
 
 plugins {
-    id "org.jetbrains.kotlin.multiplatform" version "$kotlin_version"
-    id "org.jetbrains.kotlin.plugin.serialization" version "$kotlin_version"
+    alias(libs.plugins.multiplatform)
+    alias(libs.plugins.serialization)
 }
 
 project.version = "$library_version"
@@ -24,9 +24,7 @@ apply from: "github_release.gradle"
 
 repositories {
     mavenLocal()
-    jcenter()
     mavenCentral()
-    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 kotlin {
@@ -42,10 +40,10 @@ kotlin {
             dependencies {
                 implementation kotlin('stdlib')
 
-                api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-                api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlin_serialisation_version"
-                api "com.soywiz.korlibs.klock:klock:$klock_version"
-                api "io.ktor:ktor-client-core:$ktor_version"
+                api libs.kt.coroutines
+                api libs.kt.serialization
+                api libs.klock
+                api libs.ktor.client
             }
         }
         commonTest {
@@ -57,7 +55,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation kotlin('test-junit')
-                implementation "io.ktor:ktor-client-okhttp:$ktor_version"
+                implementation libs.ktor.client.okhttp
             }
         }
         jsTest {
