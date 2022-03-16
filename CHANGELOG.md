@@ -1,5 +1,11 @@
 # SauceNaoAPI Changelog
 
+## 0.10.1
+
+## 0.10.0
+
+Migration onto libs versions toml
+
 ## 0.9.1
 
 * Versions updates:
