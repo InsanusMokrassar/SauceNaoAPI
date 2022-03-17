@@ -1,5 +1,15 @@
 # SauceNaoAPI Changelog
 
+## 0.10.1
+
+* Versions updates:
+  * `Klock`: `2.6.2` -> `2.6.3`
+  * `Ktor`: `1.6.7` -> `1.6.8`
+
+## 0.10.0
+
+Migration onto libs versions toml
+
 ## 0.9.1
 
 * Versions updates:
