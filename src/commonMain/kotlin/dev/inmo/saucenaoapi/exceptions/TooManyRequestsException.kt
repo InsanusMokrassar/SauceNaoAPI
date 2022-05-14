@@ -1,8 +1,8 @@
 package dev.inmo.saucenaoapi.exceptions
 
+import com.soywiz.klock.TimeSpan
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
-import com.soywiz.klock.TimeSpan
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests

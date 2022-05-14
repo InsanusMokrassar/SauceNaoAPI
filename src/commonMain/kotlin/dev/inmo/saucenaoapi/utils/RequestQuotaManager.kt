@@ -1,12 +1,12 @@
 package dev.inmo.saucenaoapi.utils
 
+import com.soywiz.klock.DateTime
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsLongException
 import dev.inmo.saucenaoapi.models.Header
 import dev.inmo.saucenaoapi.models.LimitsState
-import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlin.math.max
