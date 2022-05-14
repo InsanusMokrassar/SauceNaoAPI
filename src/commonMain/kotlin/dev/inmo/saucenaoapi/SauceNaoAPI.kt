@@ -5,18 +5,16 @@ import dev.inmo.saucenaoapi.exceptions.sauceNaoAPIException
 import dev.inmo.saucenaoapi.models.*
 import dev.inmo.saucenaoapi.utils.*
 import io.ktor.client.HttpClient
-import io.ktor.client.features.ClientRequestException
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.Input
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.*
 
 private const val API_TOKEN_FIELD = "api_key"
 private const val OUTPUT_TYPE_FIELD = "output_type"
@@ -40,26 +38,30 @@ val defaultSauceNaoParser = Json {
 
 data class SauceNaoAPI(
     private val apiToken: String? = null,
-    private val outputType: dev.inmo.saucenaoapi.OutputType = dev.inmo.saucenaoapi.JsonOutputType,
     private val client: HttpClient = HttpClient(),
     private val searchUrl: String = SEARCH_URL,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val parser: Json = defaultSauceNaoParser
 ) : SauceCloseable {
-    private val requestsChannel = Channel<Pair<Continuation<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
-    private val timeManager = TimeManager(scope)
-    private val quotaManager = RequestQuotaManager(scope)
+    private val requestsChannel = Channel<Pair<CompletableDeferred<SauceNaoAnswer>, HttpRequestBuilder>>(Channel.UNLIMITED)
+    private val subscope = CoroutineScope(scope.coroutineContext + SupervisorJob(scope.coroutineContext.job)).also {
+        it.coroutineContext.job.invokeOnCompletion {
+            requestsChannel.close(it)
+        }
+    }
+    private val timeManager = TimeManager(subscope)
+    private val quotaManager = RequestQuotaManager(subscope)
 
     val limitsState: LimitsState
         get() = quotaManager.limitsState
 
-    private val requestsJob = scope.launch {
+    private val requestsJob = subscope.launch {
         for ((callback, requestBuilder) in requestsChannel) {
             quotaManager.getQuota()
             launch {
                 try {
                     val answer = makeRequest(requestBuilder)
-                    callback.resume(answer)
+                    callback.complete(answer)
 
                     quotaManager.updateQuota(answer.header, timeManager)
                 } catch (e: TooManyRequestsException) {
@@ -67,7 +69,7 @@ data class SauceNaoAPI(
                     requestsChannel.send(callback to requestBuilder)
                 } catch (e: Exception) {
                     try {
-                        callback.resumeWithException(e)
+                        callback.completeExceptionally(e)
                     } catch (e: IllegalStateException) { // may happen when already resumed and api was closed
                         // do nothing
                     }
@@ -80,7 +82,7 @@ data class SauceNaoAPI(
         url: String,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? = makeRequest(
+    ): SauceNaoAnswer = makeRequest(
         url.asSauceRequestSubject,
         resultsCount = resultsCount,
         minSimilarity = minSimilarity
@@ -91,8 +93,19 @@ data class SauceNaoAPI(
         mimeType: ContentType,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? = makeRequest(
+    ): SauceNaoAnswer = makeRequest(
         mediaInput.asSauceRequestSubject(mimeType),
+        resultsCount = resultsCount,
+        minSimilarity = minSimilarity
+    )
+
+    suspend fun request(
+        file: MPPFile,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = request(
+        file.input,
+        file.contentType,
         resultsCount = resultsCount,
         minSimilarity = minSimilarity
     )
@@ -102,7 +115,7 @@ data class SauceNaoAPI(
         db: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? = makeRequest(
+    ): SauceNaoAnswer = makeRequest(
         url.asSauceRequestSubject,
         db = db,
         resultsCount = resultsCount,
@@ -114,7 +127,7 @@ data class SauceNaoAPI(
         dbmask: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? = makeRequest(
+    ): SauceNaoAnswer = makeRequest(
         url.asSauceRequestSubject,
         dbmask = dbmask,
         resultsCount = resultsCount,
@@ -126,7 +139,7 @@ data class SauceNaoAPI(
         dbmaski: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? = makeRequest(
+    ): SauceNaoAnswer = makeRequest(
         url.asSauceRequestSubject,
         dbmaski = dbmaski,
         resultsCount = resultsCount,
@@ -137,8 +150,8 @@ data class SauceNaoAPI(
         builder: HttpRequestBuilder
     ): SauceNaoAnswer {
         return try {
-            val call = client.request<HttpResponse>(builder)
-            val answerText = call.readText()
+            val call = client.request(builder)
+            val answerText = call.bodyAsText()
             timeManager.addTimeAndClear()
             parser.decodeFromString(
                 SauceNaoAnswerSerializer,
@@ -156,29 +169,32 @@ data class SauceNaoAPI(
         dbmaski: Int? = null,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer? {
-        return suspendCoroutine<SauceNaoAnswer> {
-            requestsChannel.trySend(
-                it to HttpRequestBuilder().apply {
-                    url(searchUrl)
+    ): SauceNaoAnswer {
+        val deferred = CompletableDeferred<SauceNaoAnswer>()
 
-                    apiToken ?.also { parameter(API_TOKEN_FIELD, it) }
-                    parameter(OUTPUT_TYPE_FIELD, outputType.typeCode)
-                    db ?.also { parameter(DB_FIELD, it) }
-                    dbmask ?.also { parameter(DBMASK_FIELD, it) }
-                    dbmaski ?.also { parameter(DBMASKI_FIELD, it) }
-                    resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
-                    minSimilarity ?.also { parameter(MINIMAL_SIMILARITY_FIELD, it) }
+        requestsChannel.trySend(
+            deferred to HttpRequestBuilder().apply {
+                url(searchUrl)
 
-                    when (request) {
-                        is UrlSauceRequestSubject -> {
-                            parameter(URL_FIELD, request.url)
-                        }
-                        is InputRequestSubject -> {
-                            val mimeType = request.mimeType
+                apiToken ?.also { parameter(API_TOKEN_FIELD, it) }
+                parameter(OUTPUT_TYPE_FIELD, JsonOutputType.typeCode)
+                db ?.also { parameter(DB_FIELD, it) }
+                dbmask ?.also { parameter(DBMASK_FIELD, it) }
+                dbmaski ?.also { parameter(DBMASKI_FIELD, it) }
+                resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
+                minSimilarity ?.also { parameter(MINIMAL_SIMILARITY_FIELD, it) }
 
-                            method = HttpMethod.Post
-                            body = MultiPartFormDataContent(formData {
+                when (request) {
+                    is UrlSauceRequestSubject -> {
+                        parameter(URL_FIELD, request.url)
+                    }
+                    is InputRequestSubject -> {
+                        val mimeType = request.mimeType
+
+                        method = HttpMethod.Post
+                        setBody(
+                            MultiPartFormDataContent(
+                                formData {
                                     appendInput(
                                         FILE_FIELD,
                                         Headers.build {
@@ -197,19 +213,18 @@ data class SauceNaoAPI(
                                         },
                                         block = request::input
                                     )
-                            })
-                        }
+                                }
+                            )
+                        )
                     }
                 }
-            )
-        }
+            }
+        )
+
+        return deferred.await()
     }
 
     override fun close() {
-        requestsChannel.close()
-        client.close()
-        requestsJob.cancel()
-        timeManager.close()
-        quotaManager.close()
+        subscope.cancel()
     }
 }

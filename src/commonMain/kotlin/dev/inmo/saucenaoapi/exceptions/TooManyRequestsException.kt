@@ -3,15 +3,15 @@ package dev.inmo.saucenaoapi.exceptions
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.TimeSpan
-import io.ktor.client.features.ClientRequestException
-import io.ktor.client.statement.readText
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.utils.io.errors.IOException
 
 internal suspend fun ClientRequestException.sauceNaoAPIException(): Exception  {
     return when (response.status) {
         TooManyRequests -> {
-            val answerContent = response.readText()
+            val answerContent = response.bodyAsText()
             when {
                 answerContent.contains("daily limit") -> TooManyRequestsLongException(answerContent)
                 else -> TooManyRequestsShortException(answerContent)

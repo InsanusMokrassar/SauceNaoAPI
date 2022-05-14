@@ -3,11 +3,8 @@ package dev.inmo.saucenaoapi.utils
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import com.soywiz.klock.DateTime
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 
 private fun MutableList<DateTime>.clearTooOldTimes(relatedTo: DateTime = DateTime.now()) {
     val limitValue = relatedTo - LONG_TIME_RECALCULATING_MILLIS
@@ -38,16 +35,16 @@ private data class TimeManagerTimeAdder(
 }
 
 private data class TimeManagerMostOldestInLongGetter(
-    private val continuation: Continuation<DateTime?>
+    private val deferred: CompletableDeferred<DateTime?>
 ) : TimeManagerAction {
     override suspend fun makeChangeWith(times: MutableList<DateTime>) {
         times.clearTooOldTimes()
-        continuation.resumeWith(Result.success(times.minOrNull()))
+        deferred.complete(times.minOrNull())
     }
 }
 
 private data class TimeManagerMostOldestInShortGetter(
-    private val continuation: Continuation<DateTime?>
+    private val deferred: CompletableDeferred<DateTime?>
 ) : TimeManagerAction {
     override suspend fun makeChangeWith(times: MutableList<DateTime>) {
         times.clearTooOldTimes()
@@ -56,25 +53,27 @@ private data class TimeManagerMostOldestInShortGetter(
 
         val limitTime = now - SHORT_TIME_RECALCULATING_MILLIS
 
-        continuation.resumeWith(
-            Result.success(
-                times.asSequence().filter {
-                    limitTime < it
-                }.minOrNull()
-            )
+        deferred.complete(
+            times.asSequence().filter {
+                limitTime < it
+            }.minOrNull()
         )
     }
 }
 
 internal class TimeManager(
     scope: CoroutineScope
-) : SauceCloseable {
+) {
     private val actionsChannel = Channel<TimeManagerAction>(Channel.UNLIMITED)
 
     private val timeUpdateJob = scope.launch {
         val times = mutableListOf<DateTime>()
         for (action in actionsChannel) {
             action(times)
+        }
+    }.also {
+        it.invokeOnCompletion {
+            actionsChannel.close(it)
         }
     }
 
@@ -83,21 +82,20 @@ internal class TimeManager(
     }
 
     suspend fun getMostOldestInLongPeriod(): DateTime? {
-        return suspendCoroutine {
-            actionsChannel.trySend(
-                TimeManagerMostOldestInLongGetter(it)
-            )
+        val deferred = CompletableDeferred<DateTime?>()
+        return if (actionsChannel.trySend(TimeManagerMostOldestInLongGetter(deferred)).isSuccess) {
+            deferred.await()
+        } else {
+            null
         }
     }
 
     suspend fun getMostOldestInShortPeriod(): DateTime? {
-        return suspendCoroutine {
-            actionsChannel.trySend(TimeManagerMostOldestInShortGetter(it))
+        val deferred = CompletableDeferred<DateTime?>()
+        return if (actionsChannel.trySend(TimeManagerMostOldestInShortGetter(deferred)).isSuccess) {
+            deferred.await()
+        } else {
+            null
         }
-    }
-
-    override fun close() {
-        actionsChannel.close()
-        timeUpdateJob.cancel()
     }
 }
