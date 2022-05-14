@@ -1,21 +1,20 @@
 package dev.inmo.saucenaoapi.utils
 
+import com.soywiz.klock.DateTime
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsLongException
 import dev.inmo.saucenaoapi.models.Header
 import dev.inmo.saucenaoapi.models.LimitsState
-import com.soywiz.klock.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlin.coroutines.suspendCoroutine
 import kotlin.math.max
 import kotlin.math.min
 
 internal class RequestQuotaManager (
     scope: CoroutineScope
-) : SauceCloseable {
+) {
     private var longQuota = 1
     private var shortQuota = 1
     private var longMaxQuota = 1
@@ -34,6 +33,10 @@ internal class RequestQuotaManager (
     private val quotaJob = scope.launch {
         for (callback in quotaActions) {
             callback()
+        }
+    }.also {
+        it.invokeOnCompletion {
+            quotaActions.close(it)
         }
     }
 
@@ -83,21 +86,16 @@ internal class RequestQuotaManager (
     )
 
     suspend fun getQuota() {
-        return suspendCoroutine {
-            lateinit var callback: suspend () -> Unit
-            callback = suspend {
-                if (longQuota > 0 && shortQuota > 0) {
-                    it.resumeWith(Result.success(Unit))
-                } else {
-                    quotaActions.send(callback)
-                }
+        val job = Job()
+        lateinit var callback: suspend () -> Unit
+        callback = suspend {
+            if (longQuota > 0 && shortQuota > 0) {
+                job.complete()
+            } else {
+                quotaActions.send(callback)
             }
-            quotaActions.trySend(callback)
         }
-    }
-
-    override fun close() {
-        quotaJob.cancel()
-        quotaActions.close()
+        quotaActions.trySend(callback)
+        return job.join()
     }
 }
