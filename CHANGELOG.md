@@ -1,5 +1,11 @@
 # SauceNaoAPI Changelog
 
+## 0.11.1
+
+* Versions updates:
+  * `Ktor`: `2.0.1` -> `2.0.3`
+  * `Coroutines`: `1.6.1` -> `1.6.4`
+
 ## 0.11.0
 
 * Versions updates:
