@@ -1,7 +1,7 @@
 [versions]
 
 kt = "1.7.10"
-kt-serialization = "1.4.0-RC"
+kt-serialization = "1.4.0"
 kt-coroutines = "1.6.4"
 
 klock = "3.0.0"
