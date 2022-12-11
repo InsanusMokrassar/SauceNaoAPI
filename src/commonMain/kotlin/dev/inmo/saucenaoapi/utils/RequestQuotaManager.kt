@@ -10,6 +10,7 @@ import dev.inmo.saucenaoapi.models.LimitsState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlin.math.max
@@ -18,15 +19,19 @@ import kotlin.math.min
 internal class RequestQuotaManager (
     scope: CoroutineScope
 ) {
-    private val longQuotaFlow = MutableStateFlow(1)
-    private val shortQuotaFlow = MutableStateFlow(1)
-    private val longMaxQuotaFlow = MutableStateFlow(1)
-    private val shortMaxQuotaFlow = MutableStateFlow(1)
-    private var longQuota by longQuotaFlow::value
-    private var shortQuota by shortQuotaFlow::value
-    private var longMaxQuota by longMaxQuotaFlow::value
-    private var shortMaxQuota by shortMaxQuotaFlow::value
+    private val _longQuotaFlow = MutableStateFlow(1)
+    private val _shortQuotaFlow = MutableStateFlow(1)
+    private val _longMaxQuotaFlow = MutableStateFlow(1)
+    private val _shortMaxQuotaFlow = MutableStateFlow(1)
+    private var longQuota by _longQuotaFlow::value
+    private var shortQuota by _shortQuotaFlow::value
+    private var longMaxQuota by _longMaxQuotaFlow::value
+    private var shortMaxQuota by _shortMaxQuotaFlow::value
 
+    val longQuotaFlow = _longQuotaFlow.asStateFlow()
+    val shortQuotaFlow = _shortQuotaFlow.asStateFlow()
+    val longMaxQuotaFlow = _longMaxQuotaFlow.asStateFlow()
+    val shortMaxQuotaFlow = _shortMaxQuotaFlow.asStateFlow()
     val limitsStateFlow = merge(
         longQuotaFlow, shortQuotaFlow, longMaxQuotaFlow, shortMaxQuotaFlow
     ).map { _ ->
