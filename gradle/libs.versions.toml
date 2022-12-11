@@ -1,11 +1,11 @@
 [versions]
 
-kt = "1.7.20"
-kt-serialization = "1.4.0"
+kt = "1.7.22"
+kt-serialization = "1.4.1"
 kt-coroutines = "1.6.4"
 
-klock = "3.2.0"
-ktor = "2.1.2"
+klock = "3.4.0"
+ktor = "2.2.1"
 
 gh-release = "2.4.1"
 
