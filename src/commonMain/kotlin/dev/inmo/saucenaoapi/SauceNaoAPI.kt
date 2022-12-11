@@ -52,8 +52,12 @@ data class SauceNaoAPI(
     private val timeManager = TimeManager(subscope)
     private val quotaManager = RequestQuotaManager(subscope)
 
-    val limitsState: LimitsState
-        get() = quotaManager.limitsState
+    val limitsState: LimitsState by quotaManager::limitsState
+    val longQuotaFlow by quotaManager::longQuotaFlow
+    val shortQuotaFlow by quotaManager::shortQuotaFlow
+    val longMaxQuotaFlow by quotaManager::longMaxQuotaFlow
+    val shortMaxQuotaFlow by quotaManager::shortMaxQuotaFlow
+    val limitsStateFlow by quotaManager::limitsStateFlow
 
     private val requestsJob = subscope.launch {
         for ((callback, requestBuilder) in requestsChannel) {
