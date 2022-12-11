@@ -1,5 +1,14 @@
 # SauceNaoAPI Changelog
 
+## 0.13.0
+
+* Versions:
+  * `Kotlin`: `1.7.20` -> `1.7.22`
+  * `Serialization`: `1.4.0` -> `1.4.1`
+  * `Klock`: `3.2.0` -> `3.4.0`
+  * `Ktor`: `2.1.2` -> `2.2.1`
+* Now it is possible to subscribe onto API limits changes
+
 ## 0.12.2
 
 * Versions:
