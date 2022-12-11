@@ -9,17 +9,34 @@ import dev.inmo.saucenaoapi.models.Header
 import dev.inmo.saucenaoapi.models.LimitsState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlin.math.max
 import kotlin.math.min
 
 internal class RequestQuotaManager (
     scope: CoroutineScope
 ) {
-    private var longQuota = 1
-    private var shortQuota = 1
-    private var longMaxQuota = 1
-    private var shortMaxQuota = 1
+    private val longQuotaFlow = MutableStateFlow(1)
+    private val shortQuotaFlow = MutableStateFlow(1)
+    private val longMaxQuotaFlow = MutableStateFlow(1)
+    private val shortMaxQuotaFlow = MutableStateFlow(1)
+    private var longQuota by longQuotaFlow::value
+    private var shortQuota by shortQuotaFlow::value
+    private var longMaxQuota by longMaxQuotaFlow::value
+    private var shortMaxQuota by shortMaxQuotaFlow::value
 
+    val limitsStateFlow = merge(
+        longQuotaFlow, shortQuotaFlow, longMaxQuotaFlow, shortMaxQuotaFlow
+    ).map { _ ->
+        LimitsState(
+            shortMaxQuota,
+            longMaxQuota,
+            shortQuota,
+            longQuota
+        )
+    }
     val limitsState: LimitsState
         get() = LimitsState(
             shortMaxQuota,
