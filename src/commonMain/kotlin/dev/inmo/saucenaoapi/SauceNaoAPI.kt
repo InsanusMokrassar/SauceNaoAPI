@@ -22,6 +22,7 @@ private const val URL_FIELD = "url"
 private const val FILE_FIELD = "file"
 private const val FILENAME_FIELD = "filename"
 private const val DB_FIELD = "db"
+private const val DBS_FIELD = "dbs[]"
 private const val DBMASK_FIELD = "dbmask"
 private const val DBMASKI_FIELD = "dbmaski"
 private const val RESULTS_COUNT_FIELD = "numres"
@@ -92,6 +93,45 @@ data class SauceNaoAPI(
         minSimilarity = minSimilarity
     )
 
+    /**
+     * @param db search a specific index number or all without needing to generate a bitmask.
+     * @param dbs search one or more specific index number, set more than once to search multiple.
+     */
+    suspend fun requestByDBs(
+        url: String,
+        db: Int? = null,
+        dbs: Array<Int>? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = makeRequest(
+        url.asSauceRequestSubject,
+        db = db,
+        dbs = dbs,
+        resultsCount = resultsCount,
+        minSimilarity = minSimilarity
+    )
+
+    /**
+     * @param mask Mask for selecting specific indexes to ENABLE. dbmask=8191 will search all of the first 14 indexes. If intending to search all databases, the db=999 option is more appropriate.
+     * @param excludedMask Mask for selecting specific indexes to DISABLE. dbmaski=8191 would search only indexes higher than the first 14. This is ideal when attempting to disable only certain indexes, while allowing future indexes to be included by default.
+     *
+     * Bitmask Note: Index numbers start with 0. Even though pixiv is labeled as index 5, it would be controlled with the 6th bit position, which has a decimal value of 32 when set.
+     * db=<index num or 999 for all>
+     */
+    suspend fun requestByMasks(
+        url: String,
+        mask: Int?,
+        excludedMask: Int? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = makeRequest(
+        url.asSauceRequestSubject,
+        dbmask = mask,
+        dbmaski = excludedMask,
+        resultsCount = resultsCount,
+        minSimilarity = minSimilarity
+    )
+
     suspend fun request(
         mediaInput: Input,
         mimeType: ContentType,
@@ -103,6 +143,47 @@ data class SauceNaoAPI(
         minSimilarity = minSimilarity
     )
 
+    /**
+     * @param db search a specific index number or all without needing to generate a bitmask.
+     * @param dbs search one or more specific index number, set more than once to search multiple.
+     */
+    suspend fun requestByDBs(
+        mediaInput: Input,
+        mimeType: ContentType,
+        db: Int? = null,
+        dbs: Array<Int>? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = makeRequest(
+        mediaInput.asSauceRequestSubject(mimeType),
+        db = db,
+        dbs = dbs,
+        resultsCount = resultsCount,
+        minSimilarity = minSimilarity
+    )
+
+    /**
+     * @param mask Mask for selecting specific indexes to ENABLE. dbmask=8191 will search all of the first 14 indexes. If intending to search all databases, the db=999 option is more appropriate.
+     * @param excludedMask Mask for selecting specific indexes to DISABLE. dbmaski=8191 would search only indexes higher than the first 14. This is ideal when attempting to disable only certain indexes, while allowing future indexes to be included by default.
+     *
+     * Bitmask Note: Index numbers start with 0. Even though pixiv is labeled as index 5, it would be controlled with the 6th bit position, which has a decimal value of 32 when set.
+     * db=<index num or 999 for all>
+     */
+    suspend fun requestByMasks(
+        mediaInput: Input,
+        mimeType: ContentType,
+        mask: Int?,
+        excludedMask: Int? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = makeRequest(
+        mediaInput.asSauceRequestSubject(mimeType),
+        dbmask = mask,
+        dbmaski = excludedMask,
+        resultsCount = resultsCount,
+        minSimilarity = minSimilarity
+    )
+
     suspend fun request(
         file: MPPFile,
         resultsCount: Int? = null,
@@ -110,44 +191,91 @@ data class SauceNaoAPI(
     ): SauceNaoAnswer = request(
         file.input,
         file.contentType,
-        resultsCount = resultsCount,
-        minSimilarity = minSimilarity
+        resultsCount,
+        minSimilarity
     )
 
+    /**
+     * @param db search a specific index number or all without needing to generate a bitmask.
+     * @param dbs search one or more specific index number, set more than once to search multiple.
+     */
+    suspend fun requestByDBs(
+        file: MPPFile,
+        db: Int? = null,
+        dbs: Array<Int>? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = requestByDBs(
+        file.input,
+        file.contentType,
+        db,
+        dbs,
+        resultsCount,
+        minSimilarity
+    )
+
+    /**
+     * @param mask Mask for selecting specific indexes to ENABLE. dbmask=8191 will search all of the first 14 indexes. If intending to search all databases, the db=999 option is more appropriate.
+     * @param excludedMask Mask for selecting specific indexes to DISABLE. dbmaski=8191 would search only indexes higher than the first 14. This is ideal when attempting to disable only certain indexes, while allowing future indexes to be included by default.
+     *
+     * Bitmask Note: Index numbers start with 0. Even though pixiv is labeled as index 5, it would be controlled with the 6th bit position, which has a decimal value of 32 when set.
+     * db=<index num or 999 for all>
+     */
+    suspend fun requestByMasks(
+        file: MPPFile,
+        mask: Int?,
+        excludedMask: Int? = null,
+        resultsCount: Int? = null,
+        minSimilarity: Float? = null
+    ): SauceNaoAnswer = requestByMasks(
+        file.input,
+        file.contentType,
+        mask,
+        excludedMask,
+        resultsCount,
+        minSimilarity
+    )
+
+    @Deprecated("Renamed", ReplaceWith("requestByDBs(url, db, null, resultsCount, minSimilarity)"))
     suspend fun requestByDb(
         url: String,
         db: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer = makeRequest(
-        url.asSauceRequestSubject,
-        db = db,
-        resultsCount = resultsCount,
-        minSimilarity = minSimilarity
+    ): SauceNaoAnswer = requestByDBs(
+        url,
+        db,
+        null,
+        resultsCount,
+        minSimilarity
     )
 
-    suspend fun requestByMask(
+    @Deprecated("Renamed", ReplaceWith("requestByMasks(url, dbmask, null, resultsCount, minSimilarity)"))
+    suspend fun request(
         url: String,
         dbmask: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer = makeRequest(
-        url.asSauceRequestSubject,
-        dbmask = dbmask,
-        resultsCount = resultsCount,
-        minSimilarity = minSimilarity
+    ): SauceNaoAnswer = requestByMasks(
+        url,
+        dbmask,
+        null,
+        resultsCount,
+        minSimilarity
     )
 
+    @Deprecated("Renamed", ReplaceWith("requestByMasks(url, null, dbmaski, resultsCount, minSimilarity)"))
     suspend fun requestByMaskI(
         url: String,
         dbmaski: Int,
         resultsCount: Int? = null,
         minSimilarity: Float? = null
-    ): SauceNaoAnswer = makeRequest(
-        url.asSauceRequestSubject,
-        dbmaski = dbmaski,
-        resultsCount = resultsCount,
-        minSimilarity = minSimilarity
+    ): SauceNaoAnswer = requestByMasks(
+        url,
+        null,
+        dbmaski,
+        resultsCount,
+        minSimilarity
     )
 
     private suspend fun makeRequest(
@@ -169,6 +297,7 @@ data class SauceNaoAPI(
     private suspend fun makeRequest(
         request: SauceRequestSubject,
         db: Int? = null,
+        dbs: Array<Int>? = null,
         dbmask: Int? = null,
         dbmaski: Int? = null,
         resultsCount: Int? = null,
@@ -183,6 +312,7 @@ data class SauceNaoAPI(
                 apiToken ?.also { parameter(API_TOKEN_FIELD, it) }
                 parameter(OUTPUT_TYPE_FIELD, JsonOutputType.typeCode)
                 db ?.also { parameter(DB_FIELD, it) }
+                dbs ?.forEach { parameter(DBS_FIELD, it) }
                 dbmask ?.also { parameter(DBMASK_FIELD, it) }
                 dbmaski ?.also { parameter(DBMASKI_FIELD, it) }
                 resultsCount ?.also { parameter(RESULTS_COUNT_FIELD, it) }
