@@ -2,6 +2,9 @@
 
 ## 0.14.0
 
+* `LimitStatus` is `Comparable<LimitStatus>` since this update
+* `Limits` is `Comparable<Limits>` since this update
+
 ## 0.13.0
 
 * Versions:
