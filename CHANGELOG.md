@@ -1,5 +1,11 @@
 # SauceNaoAPI Changelog
 
+## 0.14.0
+
+* `LimitStatus` is `Comparable<LimitStatus>` since this update
+* `Limits` is `Comparable<Limits>` since this update
+* Main API has been changed
+
 ## 0.13.0
 
 * Versions:
