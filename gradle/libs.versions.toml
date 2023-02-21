@@ -5,7 +5,7 @@ kt-serialization = "1.4.1"
 kt-coroutines = "1.6.4"
 
 klock = "3.4.0"
-ktor = "2.2.1"
+ktor = "2.2.3"
 
 gh-release = "2.4.1"
 
