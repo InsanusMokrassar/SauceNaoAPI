@@ -1,5 +1,10 @@
 # SauceNaoAPI Changelog
 
+## 0.14.1
+
+* Versions:
+  * `Ktor`: `2.2.3`
+
 ## 0.14.0
 
 * `LimitStatus` is `Comparable<LimitStatus>` since this update
