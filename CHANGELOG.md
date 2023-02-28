@@ -3,6 +3,8 @@
 ## 0.15.0
 
 * Versions:
+  * `Kotlin`: `1.8.10`
+  * `Serialization`: `1.5.0`
   * `Ktor`: `2.2.3`
 
 ## 0.14.0
