@@ -8,3 +8,4 @@ settings.xml
 .gradle/
 build/
 out/
+kotlin-js-store/
