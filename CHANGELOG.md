@@ -1,5 +1,10 @@
 # SauceNaoAPI Changelog
 
+## 0.15.1
+
+* Versions:
+  * `Ktor`: `2.2.4`
+
 ## 0.15.0
 
 * Versions:
