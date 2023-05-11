@@ -1,5 +1,11 @@
 # SauceNaoAPI Changelog
 
+## 0.16.0
+
+* Versions:
+  * `Kotlin`: `1.8.21`
+  * `Ktor`: `2.3.0`
+
 ## 0.15.1
 
 * Versions:
