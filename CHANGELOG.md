@@ -2,6 +2,8 @@
 
 ## 0.16.0
 
+Add `MicroUtils` as used micro utils
+
 * Versions:
   * `Kotlin`: `1.8.21`
   * `Ktor`: `2.3.0`

@@ -28,11 +28,19 @@ repositories {
 }
 
 kotlin {
-    jvm()
+    jvm {
+        compilations.main {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
     js(IR) {
         browser()
         nodejs()
     }
+    linuxX64()
+    mingwX64()
 
 
     sourceSets {
@@ -44,6 +52,9 @@ kotlin {
                 api libs.kt.serialization
                 api libs.klock
                 api libs.ktor.client
+                api libs.microutils.common
+                api libs.microutils.ktor.common
+                api libs.microutils.mimetypes
             }
         }
         commonTest {
@@ -64,4 +75,9 @@ kotlin {
             }
         }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

@@ -1,5 +1,7 @@
 package dev.inmo.saucenaoapi
 
+import dev.inmo.micro_utils.common.MPPFile
+import dev.inmo.micro_utils.ktor.common.input
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
 import dev.inmo.saucenaoapi.exceptions.sauceNaoAPIException
 import dev.inmo.saucenaoapi.models.*
@@ -189,7 +191,7 @@ data class SauceNaoAPI(
         resultsCount: Int? = null,
         minSimilarity: Float? = null
     ): SauceNaoAnswer = request(
-        file.input,
+        file.input(),
         file.contentType,
         resultsCount,
         minSimilarity
@@ -206,7 +208,7 @@ data class SauceNaoAPI(
         resultsCount: Int? = null,
         minSimilarity: Float? = null
     ): SauceNaoAnswer = requestByDBs(
-        file.input,
+        file.input(),
         file.contentType,
         db,
         dbs,
@@ -228,7 +230,7 @@ data class SauceNaoAPI(
         resultsCount: Int? = null,
         minSimilarity: Float? = null
     ): SauceNaoAnswer = requestByMasks(
-        file.input,
+        file.input(),
         file.contentType,
         mask,
         excludedMask,
