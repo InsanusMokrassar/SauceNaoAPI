@@ -7,6 +7,10 @@ kt-coroutines = "1.6.4"
 klock = "3.4.0"
 ktor = "2.3.0"
 
+microutils = "0.18.2"
+
+okio = "3.3.0"
+
 gh-release = "2.4.1"
 
 [libraries]
@@ -19,6 +23,10 @@ klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
 
 ktor-client = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+
+microutils-common = { module = "dev.inmo:micro_utils.common", version.ref = "microutils" }
+microutils-ktor-common = { module = "dev.inmo:micro_utils.ktor.common", version.ref = "microutils" }
+microutils-mimetypes = { module = "dev.inmo:micro_utils.mime_types", version.ref = "microutils" }
 
 buildscript-kt-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kt" }
 buildscript-kt-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kt" }
