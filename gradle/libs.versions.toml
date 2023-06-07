@@ -1,6 +1,6 @@
 [versions]
 
-kt = "1.8.21"
+kt = "1.8.22"
 kt-serialization = "1.5.0"
 kt-coroutines = "1.6.4"
 
