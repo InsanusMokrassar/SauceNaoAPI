@@ -4,7 +4,7 @@ kt = "1.8.21"
 kt-serialization = "1.5.0"
 kt-coroutines = "1.6.4"
 
-klock = "3.4.0"
+klock = "4.0.6"
 ktor = "2.3.0"
 
 microutils = "0.18.2"
