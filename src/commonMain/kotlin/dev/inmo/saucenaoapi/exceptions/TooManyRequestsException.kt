@@ -1,6 +1,6 @@
 package dev.inmo.saucenaoapi.exceptions
 
-import com.soywiz.klock.TimeSpan
+import korlibs.time.TimeSpan
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import io.ktor.client.plugins.ClientRequestException

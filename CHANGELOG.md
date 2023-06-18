@@ -1,5 +1,14 @@
 # SauceNaoAPI Changelog
 
+## 0.17.0
+
+* Versions:
+  * `Kotlin`: `1.8.22`
+  * `Serialization`: `1.5.1`
+  * `Ktor`: `2.3.1`
+  * `MicroUtils`: `0.19.2`
+  * `Klock`: `4.0.3`
+
 ## 0.16.0
 
 Add `MicroUtils` as used micro utils

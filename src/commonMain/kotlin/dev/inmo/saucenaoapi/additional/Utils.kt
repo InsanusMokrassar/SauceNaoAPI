@@ -1,6 +1,6 @@
 package dev.inmo.saucenaoapi.additional
 
-import com.soywiz.klock.TimeSpan
+import korlibs.time.TimeSpan
 
 typealias AccountType = Int
 const val defaultAccountType: AccountType = 1 // "basic"

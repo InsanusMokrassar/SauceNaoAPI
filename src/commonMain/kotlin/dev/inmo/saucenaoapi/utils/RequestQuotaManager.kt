@@ -1,6 +1,6 @@
 package dev.inmo.saucenaoapi.utils
 
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 import dev.inmo.saucenaoapi.additional.LONG_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.additional.SHORT_TIME_RECALCULATING_MILLIS
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
