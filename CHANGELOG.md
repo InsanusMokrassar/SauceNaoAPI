@@ -1,5 +1,7 @@
 # SauceNaoAPI Changelog
 
+## 0.17.0
+
 ## 0.16.0
 
 Add `MicroUtils` as used micro utils
