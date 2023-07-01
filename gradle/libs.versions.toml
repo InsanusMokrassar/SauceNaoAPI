@@ -7,7 +7,7 @@ kt-coroutines = "1.6.4"
 klock = "4.0.3"
 ktor = "2.3.1"
 
-microutils = "0.19.2"
+microutils = "0.19.7"
 
 gh-release = "2.4.1"
 
