@@ -2,6 +2,11 @@
 
 ## 0.17.1
 
+* Versions:
+  * `Coroutines`: `1.7.2`
+  * `Ktor`: `2.3.2`
+  * `MicroUtils`: `0.19.7`
+
 ## 0.17.0
 
 * Versions:
