@@ -2,12 +2,12 @@
 
 kt = "1.8.22"
 kt-serialization = "1.5.1"
-kt-coroutines = "1.7.2"
+kt-coroutines = "1.7.3"
 
 klock = "4.0.3"
-ktor = "2.3.2"
+ktor = "2.3.4"
 
-microutils = "0.19.7"
+microutils = "0.19.9"
 
 gh-release = "2.4.1"
 
