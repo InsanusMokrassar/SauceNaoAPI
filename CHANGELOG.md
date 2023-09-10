@@ -1,5 +1,12 @@
 # SauceNaoAPI Changelog
 
+## 0.17.2
+
+* Versions:
+  * `Coroutines`: `1.7.3`
+  * `Ktor`: `2.3.4`
+  * `MicroUtils`: `0.19.9`
+
 ## 0.17.1
 
 * Versions:
