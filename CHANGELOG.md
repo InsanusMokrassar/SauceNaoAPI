@@ -1,5 +1,15 @@
 # SauceNaoAPI Changelog
 
+## 0.18.0
+
+* Versions:
+  * `Kotlin`: `2.1.0`
+  * `Serialization`: `1.7.3`
+  * `Coroutines`: `1.9.0`
+  * `Ktor`: `3.0.2`
+  * `MicroUtils`: `0.23.2`
+  * `Klock`: `5.4.0`
+
 ## 0.17.2
 
 * Versions:

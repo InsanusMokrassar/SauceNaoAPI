@@ -7,6 +7,7 @@ import dev.inmo.saucenaoapi.exceptions.TooManyRequestsException
 import dev.inmo.saucenaoapi.exceptions.TooManyRequestsLongException
 import dev.inmo.saucenaoapi.models.Header
 import dev.inmo.saucenaoapi.models.LimitsState
+import korlibs.time.millisecondsLong
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
