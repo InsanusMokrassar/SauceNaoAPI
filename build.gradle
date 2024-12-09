@@ -25,13 +25,14 @@ apply from: "github_release.gradle"
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url "https://nexus.inmo.dev/repository/maven-releases/" }
 }
 
 kotlin {
     jvm {
         compilations.main {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -78,6 +79,6 @@ kotlin {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

@@ -1,15 +1,15 @@
 [versions]
 
-kt = "1.8.22"
-kt-serialization = "1.5.1"
-kt-coroutines = "1.7.3"
+kt = "2.1.0"
+kt-serialization = "1.7.3"
+kt-coroutines = "1.9.0"
 
-klock = "4.0.3"
-ktor = "2.3.4"
+klock = "5.4.0"
+ktor = "3.0.2"
 
-microutils = "0.19.9"
+microutils = "0.23.2"
 
-gh-release = "2.4.1"
+gh-release = "2.5.2"
 
 [libraries]
 
@@ -17,7 +17,7 @@ kt-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kt" 
 kt-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kt-serialization" }
 kt-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kt-coroutines" }
 
-klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
+klock = { module = "com.soywiz.korge:korlibs-time", version.ref = "klock" }
 
 ktor-client = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
