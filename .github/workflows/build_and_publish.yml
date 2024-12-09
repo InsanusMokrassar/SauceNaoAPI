@@ -16,11 +16,6 @@ jobs:
           mv gradle.properties.tmp gradle.properties
       - name: Build
         run: ./gradlew build
-      - name: Publish to Gitea
-        continue-on-error: true
-        run: ./gradlew publishAllPublicationsToGiteaRepository
-        env:
-          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
       - name: Publish
         run: ./gradlew publishAllPublicationsToGithubPackagesRepository --no-parallel
         continue-on-error: true
