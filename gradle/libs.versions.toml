@@ -1,15 +1,16 @@
 [versions]
 
-kt = "2.1.0"
-kt-serialization = "1.7.3"
-kt-coroutines = "1.9.0"
+kt = "2.2.20"
+kt-coroutines = "1.10.2"
+kt-serialization = "1.9.0"
 
 klock = "5.4.0"
-ktor = "3.0.2"
+ktor = "3.3.0"
 
-microutils = "0.23.2"
+microutils = "0.26.5"
 
 gh-release = "2.5.2"
+nmcp = "1.2.0"
 
 [libraries]
 
@@ -34,3 +35,5 @@ buildscript-gh-release = { module = "com.github.breadmoirai:github-release", ver
 
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kt" }
+
+nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }

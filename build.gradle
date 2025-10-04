@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
@@ -14,6 +14,7 @@ buildscript {
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.nmcp.aggregation)
 }
 
 project.version = "$library_version"
@@ -23,9 +24,9 @@ apply from: "publish.gradle"
 apply from: "github_release.gradle"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url "https://nexus.inmo.dev/repository/maven-releases/" }
+    mavenLocal()
 }
 
 kotlin {
@@ -75,6 +76,19 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
+    }
+}
+
+if ((project.hasProperty('SONATYPE_USER') || System.getenv('SONATYPE_USER') != null) && (project.hasProperty('SONATYPE_PASSWORD') || System.getenv('SONATYPE_PASSWORD') != null)) {
+    nmcpAggregation {
+        centralPortal {
+            username = project.hasProperty('SONATYPE_USER') ? project.property('SONATYPE_USER') : System.getenv('SONATYPE_USER')
+            password = project.hasProperty('SONATYPE_PASSWORD') ? project.property('SONATYPE_PASSWORD') : System.getenv('SONATYPE_PASSWORD')
+            validationTimeout = Duration.ofHours(4)
+            publishingType = System.getenv('PUBLISHING_TYPE') != "" ? System.getenv('PUBLISHING_TYPE') : "USER_MANAGED"
+        }
+
+        publishAllProjectsProbablyBreakingProjectIsolation()
     }
 }
 
