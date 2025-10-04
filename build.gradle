@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
@@ -24,9 +24,9 @@ apply from: "publish.gradle"
 apply from: "github_release.gradle"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url "https://nexus.inmo.dev/repository/maven-releases/" }
+    mavenLocal()
 }
 
 kotlin {
