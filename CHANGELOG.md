@@ -1,5 +1,9 @@
 # SauceNaoAPI Changelog
 
+## 0.19.1
+
+* Versions:
+
 ## 0.19.0
 
 * Versions:
