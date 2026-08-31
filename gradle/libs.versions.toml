@@ -10,7 +10,7 @@ ktor = "3.4.2"
 microutils = "0.29.2"
 
 gh-release = "2.5.2"
-nmcp = "1.4.4"
+nmcp = "1.6.2"
 
 [libraries]
 
